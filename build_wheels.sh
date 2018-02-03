@@ -7,7 +7,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 MOOSE_SOURCE_DIR=/tmp/moose-core
 # Clone git or update.
 if [ ! -d $MOOSE_SOURCE_DIR ]; then
-    git clone -b wheels https://github.com/BhallaLab/moose-core --depth 10 $MOOSE_SOURCE_DIR
+    git clone https://github.com/BhallaLab/moose-core --depth 10 $MOOSE_SOURCE_DIR
 else
     cd $MOOSE_SOURCE_DIR && git pull && git merge master -X theirs && cd -
 fi
