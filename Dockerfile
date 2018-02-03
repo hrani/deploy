@@ -17,4 +17,5 @@ RUN if [ ! -f /usr/local/lib/libgsl.a ]; then \
     make install && cd ..; fi 
 
 RUN git clone https://github.com/BhallaLab/pymoose-wheels 
+RUN /opt/python/cp27-cp27m/bin/pip instal twine
 RUN cd pymoose-wheels && git pull && ./build_wheels.sh
