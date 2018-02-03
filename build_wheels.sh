@@ -9,7 +9,7 @@ MOOSE_SOURCE_DIR=/tmp/moose-core
 if [ ! -d $MOOSE_SOURCE_DIR ]; then
     git clone https://github.com/BhallaLab/moose-core --depth 10 $MOOSE_SOURCE_DIR
 else
-    cd $MOOSE_SOURCE_DIR && git pull && git merge master -X theirs && cd -
+    cd $MOOSE_SOURCE_DIR && git pull && cd -
 fi
 
 # Try to link statically.
@@ -43,4 +43,5 @@ for whl in $WHEELHOUSE/*.whl; do
     #auditwheel repair "$whl" -w $WHEELHOUSE
     auditwheel show "$whl"
 done
+
 ls -lh $WHEELHOUSE/*.whl
