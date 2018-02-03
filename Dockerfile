@@ -15,6 +15,6 @@ RUN if [ ! -f /usr/local/lib/libgsl.a ]; then \
     tar xvf gsl-2.4.tar.gz && cd gsl-2.4 && \
     CFLAGS=-fPIC ./configure --enable-static && make -j4 && \
     make install && cd ..; fi 
-RUN git clone https://github.com/BhallaLab/moose-core --depth 10 
-RUN cd moose-core/wheels && ./build_wheels && cd 
-RUN pwd && ls -ah
+
+RUN git clone https://github.com/BhallaLab/pymoose-wheels 
+RUN cd pymoose-wheels && ls && ./build_wheels.sh
