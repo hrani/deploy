@@ -9,7 +9,7 @@ MOOSE_SOURCE_DIR=/tmp/moose-core
 if [ ! -d $MOOSE_SOURCE_DIR ]; then
     git clone https://github.com/BhallaLab/moose-core --depth 10 $MOOSE_SOURCE_DIR
 else
-    cd $MOOSE_SOURCE_DIR && git pull && git merge master -X theirs && cd -
+    cd $MOOSE_SOURCE_DIR && git pull && cd -
 fi
 
 # Try to link statically.
@@ -28,7 +28,8 @@ for PYDIR in /opt/python/cp27-cp27m/ /opt/python/cp34-cp34m/ /opt/python/cp36-cp
         $PYTHON -m pip install numpy
         $CMAKE -DPYTHON_EXECUTABLE=$PYTHON  \
             -DGSL_STATIC_LIBRARIES=$GSL_STATIC_LIBS \
-            -DMOOSE_VERSION="3.2rc1" ${MOOSE_SOURCE_DIR}
+            -DVERSION_MOOSE=3.2.0rc1 \
+            ${MOOSE_SOURCE_DIR}
         make -j4
         
         # Now build bdist_wheel
@@ -43,4 +44,5 @@ for whl in $WHEELHOUSE/*.whl; do
     #auditwheel repair "$whl" -w $WHEELHOUSE
     auditwheel show "$whl"
 done
+
 ls -lh $WHEELHOUSE/*.whl
