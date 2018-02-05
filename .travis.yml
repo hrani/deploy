@@ -1,7 +1,13 @@
 language: generic
 sudo: required 
+
+os:
+    - linux
+    - osx
+
 service:
     - docker
 
 before_install :
-    - docker build -t bhallalab/pymoose-wheels .
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then docker build -t bhallalab/pymoose-wheels . ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./build_wheels_osx.sh; fi
