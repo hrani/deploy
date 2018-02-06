@@ -3,10 +3,8 @@ set -e
 set -x
 
 brew install gsl 
-brew install cmake
-sudo easy_install pip --upgrade
-sudo pip install pip --upgrade 
-sudo pip install delocate 
+sudo easy_install pip --upgrade || echo "Failed to upgrade pip"
+sudo pip install delocate  
 sudo pip install twine
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
@@ -22,6 +20,6 @@ fi
 
 cd $MOOSE_SOURCE_DIR
 
-mkdir _build
+mkdir -p _build
 cd _build
 cmake .. && make -j3 && cd python && python setup.cmake.py bdist_wheel 
