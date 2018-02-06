@@ -5,12 +5,14 @@ set -x
 brew install gsl 
 sudo easy_install pip --upgrade || echo "Failed to upgrade pip"
 
-sudo pip install --upgrade setuptools --user python
-pip install delocate --upgrade --user
-pip install twine  --upgrade --user
+#pip install setuptools --prefix=$HOME/.local 
+sudo pip install delocate --upgrade  --user python
+sudo pip install twine  --upgrade --user python
 
-export PATH=$HOME/Library/Python/2.7/bin:$PATH
-export PATH=$HOME/Library/Python/3.6/bin:$PATH
+export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
+
+export PATH=$HOME/.local/bin:$PATH
+export PATH=$HOME/.local/bin:$PATH
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
