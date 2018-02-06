@@ -4,9 +4,12 @@ set -x
 
 brew install gsl 
 sudo easy_install pip --upgrade || echo "Failed to upgrade pip"
-pip install setuptools --upgrade   --user
-pip install delocate --upgrade --user
-pip install twine  --upgrade --user
+
+pip install setuptools --upgrade --prefix=$HOME/.local
+pip install delocate --upgrade --prefix=$HOME/.local
+pip install twine  --upgrade --prefix=$HOME/.local
+
+export PATH=$HOME/.local/bin:$PATH
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -30,4 +33,4 @@ cmake -DVERSION_MOOSE=3.2.0rc1 .. && make -j3 && cd python && python setup.cmake
 mkdir -p $HOME/wheelhouse
 cd $MOOSE_SOURCE_DIR/_build/python/ && delocate-wheel -w $HOME/wheelhouse -v dist/*.whl
 ls $HOME/wheelhouse/*.whl
-twine upload -u bhallalab -p $PYPI_PASSWORD_BHALLLAB $HOME/wheelhouse/*.whl
+python -m twine upload -u bhallalab -p $PYPI_PASSWORD_BHALLLAB $HOME/wheelhouse/*.whl
