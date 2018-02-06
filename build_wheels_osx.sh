@@ -1,18 +1,18 @@
 #!/bin/bash
+
 set -e
 set -x
 
 brew install gsl 
-sudo easy_install pip --upgrade || echo "Failed to upgrade pip"
 
-#pip install setuptools --prefix=$HOME/.local 
-sudo pip install delocate --upgrade  --user python
-sudo pip install twine  --upgrade --user python
+# setup virtualenv
+python -m virtualenv -p /usr/bin/python $HOME/python2
+source $HOME/python2/bin/activate
 
-export PYTHONPATH=$HOME/.local/lib/python2.7/site-packages:$PYTHONPATH
-
-export PATH=$HOME/.local/bin:$PATH
-export PATH=$HOME/.local/bin:$PATH
+pip install setuptools --upgrade
+pip install numpy --upgrade
+pip install delocate --upgrade 
+pip install twine  --upgrade 
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
