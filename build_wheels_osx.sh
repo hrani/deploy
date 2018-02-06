@@ -4,8 +4,9 @@ set -x
 
 brew install gsl 
 sudo easy_install pip --upgrade || echo "Failed to upgrade pip"
-sudo pip install delocate  
-sudo pip install twine
+sudo pip install setuptools --upgrade   
+sudo pip install delocate --upgrade
+sudo pip install twine  --upgrade
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -19,9 +20,7 @@ else
 fi
 
 cd $MOOSE_SOURCE_DIR
-
-mkdir -p _build
-cd _build
+mkdir -p _build && cd _build
 
 PLATFORM=$(python -c "import distutils.util; print(distutils.util.get_platform())")
 echo "Building wheel for $PLATFORM"
