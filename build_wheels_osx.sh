@@ -4,9 +4,9 @@ set -x
 
 brew install gsl 
 sudo easy_install pip --upgrade || echo "Failed to upgrade pip"
-sudo pip install setuptools --upgrade   
-sudo pip install delocate --upgrade
-sudo pip install twine  --upgrade
+pip install setuptools --upgrade   --user
+pip install delocate --upgrade --user
+pip install twine  --upgrade --user
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
