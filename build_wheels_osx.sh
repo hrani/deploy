@@ -22,4 +22,13 @@ cd $MOOSE_SOURCE_DIR
 
 mkdir -p _build
 cd _build
-cmake .. && make -j3 && cd python && python setup.cmake.py bdist_wheel 
+
+PLATFORM=$(python -c "import distutils.util; print(distutils.util.get_platform())")
+echo "Building wheel for $PLATFORM"
+cmake -DVERSION_MOOSE=3.2.0rc1 .. && make -j3 && cd python && python setup.cmake.py bdist_wheel -p $PLATFORM
+
+# Now fix the wheel using delocate.
+mkdir -p $HOME/wheelhouse
+cd $MOOSE_SOURCE_DIR/_build/python/ && delocate-wheel -w $HOME/wheelhouse -v dist/*.whl
+ls $HOME/wheelhouse/*.whl
+twine upload -u bhallalab -p $PYPI_PASSWORD_BHALLLAB $HOME/wheelhouse/*.whl
