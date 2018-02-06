@@ -5,11 +5,12 @@ set -x
 brew install gsl 
 sudo easy_install pip --upgrade || echo "Failed to upgrade pip"
 
-pip install setuptools --upgrade --prefix=$HOME/.local
-pip install delocate --upgrade --prefix=$HOME/.local
-pip install twine  --upgrade --prefix=$HOME/.local
+pip install setuptools --upgrade --user
+pip install delocate --upgrade --user
+pip install twine  --upgrade --user
 
-export PATH=$HOME/.local/bin:$PATH
+export PATH=$HOME/Library/Python/2.7/bin:$PATH
+export PATH=$HOME/Library/Python/3.6/bin:$PATH
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -30,7 +31,8 @@ echo "Building wheel for $PLATFORM"
 cmake -DVERSION_MOOSE=3.2.0rc1 .. && make -j3 && cd python && python setup.cmake.py bdist_wheel -p $PLATFORM
 
 # Now fix the wheel using delocate.
+rm -rf $HOME/wheelhouse
 mkdir -p $HOME/wheelhouse
 cd $MOOSE_SOURCE_DIR/_build/python/ && delocate-wheel -w $HOME/wheelhouse -v dist/*.whl
-ls $HOME/wheelhouse/*.whl
-python -m twine upload -u bhallalab -p $PYPI_PASSWORD_BHALLLAB $HOME/wheelhouse/*.whl
+ls $HOME/wheelhouse/pymoose*.whl
+python -m twine upload -u bhallalab -p $PYPI_PASSWORD_BHALLLAB $HOME/wheelhouse/pymoose*.whl
