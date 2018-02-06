@@ -5,6 +5,8 @@ set -x
 
 brew install gsl 
 
+sudo /usr/bin/easy_install virtualenv
+
 # setup virtualenv
 python -m virtualenv -p /usr/bin/python $HOME/python2
 source $HOME/python2/bin/activate
