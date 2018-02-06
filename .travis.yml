@@ -2,7 +2,6 @@ language: generic
 sudo: required 
 
 os:
-    - linux
     - osx
 
 service:

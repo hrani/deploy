@@ -5,7 +5,7 @@ set -x
 brew install gsl 
 sudo easy_install pip --upgrade || echo "Failed to upgrade pip"
 
-pip install setuptools --upgrade --user
+sudo pip install setuptools --upgrade 
 pip install delocate --upgrade --user
 pip install twine  --upgrade --user
 
