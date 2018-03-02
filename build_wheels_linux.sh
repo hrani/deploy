@@ -49,7 +49,6 @@ done
 
 # now check the wheels.
 for whl in $WHEELHOUSE/*.whl; do
-    auditwheel repair "$whl" -w $WHEELHOUSE
     auditwheel show "$whl"
 done
 
