@@ -4,14 +4,9 @@ set -x
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-REVISION=$1; shift
-if [ ! $REVISION ]; then
-    echo "USAGE: $0 release_tag"
-    exit;
-fi
-
-VERSION=${REVISION#v}
-    
+# tag on github and revision number. Make sure that they are there.
+REVISION=v3.2.0
+VERSION=3.2.0
 echo "Building revision $REVISION, version $VERSION"
 
 curl -O -sL https://github.com/BhallaLab/moose-core/archive/$REVISION.tar.gz
@@ -53,7 +48,7 @@ done
 
 # now check the wheels.
 for whl in $WHEELHOUSE/*.whl; do
-    #auditwheel repair "$whl" -w $WHEELHOUSE
+    auditwheel repair "$whl" -w $WHEELHOUSE
     auditwheel show "$whl"
 done
 
