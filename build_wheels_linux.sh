@@ -4,13 +4,20 @@ set -x
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-REVISION=${1-chennapoda}
-echo "Building revision $REVISION"
+REVISION=$1; shift
+if [ ! $REVISION ]; then
+    echo "USAGE: $0 release_tag"
+    exit;
+fi
+
+VERSION=${REVISION%v}
+    
+echo "Building revision $REVISION, version $VERSION"
 
 curl -O -sL https://github.com/BhallaLab/moose-core/archive/$REVISION.tar.gz
 tar xvf $REVISION.tar.gz
 
-MOOSE_SOURCE_DIR=$SCRIPT_DIR/moose-core-$REVISION
+MOOSE_SOURCE_DIR=$SCRIPT_DIR/moose-core-$VERSION
 
 if [ ! -d $MOOSE_SOURCE_DIR ]; then
     echo "$MOOSE_SOURCE_DIR is not found."
