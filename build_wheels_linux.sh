@@ -5,10 +5,22 @@ set -x
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
+
 # tag on github and revision number. Make sure that they are there.
-REVISION=v3.2.0
-VERSION=3.2.0
+REVISION=v3.2.1
+VERSION=3.2.1
 echo "Building revision $REVISION, version $VERSION"
+
+if [ ! -f /usr/local/lib/libgsl.a ]; then 
+    wget --no-check-certificate ftp://ftp.gnu.org/gnu/gsl/gsl-2.4.tar.gz 
+    tar xvf gsl-2.4.tar.gz 
+    cd gsl-2.4 
+    CFLAGS=-fPIC ./configure --enable-static && make -j4 
+    make install 
+    cd ..
+fi 
+rm -rf *.tar.gz
+rm -rf moose-core*
 
 curl -O -sL https://github.com/BhallaLab/moose-core/archive/$REVISION.tar.gz
 tar xvf $REVISION.tar.gz
@@ -26,7 +38,8 @@ CMAKE=/usr/bin/cmake28
 
 WHEELHOUSE=$HOME/wheelhouse
 mkdir -p $WHEELHOUSE
-for PYDIR in /opt/python/cp27-cp27m/ /opt/python/cp34-cp34m/ /opt/python/cp36-cp36m/; do
+for PYV in 27 36; do
+    PYDIR=/opt/python/cp${PYV}-cp${PYV}m
     PYVER=$(basename $PYDIR)
     mkdir -p $PYVER
     (
@@ -43,9 +56,20 @@ for PYDIR in /opt/python/cp27-cp27m/ /opt/python/cp34-cp34m/ /opt/python/cp36-cp
         # Now build bdist_wheel
         cd python
         cp setup.cmake.py setup.py
-        $PYDIR/bin/pip wheel . -w $WHEELHOUSE
+        $PYDIR/bin/pip wheel . -w $WHEELHOUSE 
     )
 done
+
+echo "Testing ... "
+/opt/python/cp27-cp27m/bin/pip install $WHEELHOUSE/pymoose*$VERSION*py2*.whl
+/opt/python/cp36-cp36m/bin/pip install $WHEELHOUSE/pymoose*$VERSION*py3*.whl
+for PYV in 27 36; do
+    PYDIR=/opt/python/cp${PYV}-cp${PYV}m
+    echo "Building using $PYDIR in $PYVER"
+    PYTHON=$(ls $PYDIR/bin/python?.?)
+    $PYTHON -c 'import moose; import moose.utils as mu'
+done
+	
 
 # now check the wheels.
 for whl in $WHEELHOUSE/*.whl; do
