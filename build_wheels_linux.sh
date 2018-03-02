@@ -4,12 +4,17 @@ set -x
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
-MOOSE_SOURCE_DIR=/tmp/moose-core
-# Clone git or update.
+REVISION=${1-chennapoda}
+echo "Building revision $REVISION"
+
+curl -O -sL https://github.com/BhallaLab/moose-core/archive/$REVISION.tar.gz
+tar xvf $REVISION.tar.gz
+
+MOOSE_SOURCE_DIR=$SCRIPT_DIR/moose-core-$REVISION
+
 if [ ! -d $MOOSE_SOURCE_DIR ]; then
-    git clone https://github.com/BhallaLab/moose-core --depth 10 $MOOSE_SOURCE_DIR
-else
-    cd $MOOSE_SOURCE_DIR && git pull && cd -
+    echo "$MOOSE_SOURCE_DIR is not found."
+    exit
 fi
 
 # Try to link statically.

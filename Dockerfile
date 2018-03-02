@@ -16,5 +16,7 @@ RUN if [ ! -f /usr/local/lib/libgsl.a ]; then \
     CFLAGS=-fPIC ./configure --enable-static && make -j4 && \
     make install && cd ..; fi 
 
-RUN git clone https://github.com/BhallaLab/pymoose-wheels 
-RUN cd pymoose-wheels && git pull && ./build_wheels_linux.sh
+RUN curl -sL -O https://github.com/BhallaLab/pymoose-wheels/archive/master.tar.gz 
+RUN ls -la *.gz
+RUN tar xvf master.tar.gz
+RUN cd pymoose-wheels-master && ./build_wheels_linux.sh
