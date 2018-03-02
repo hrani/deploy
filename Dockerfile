@@ -20,4 +20,4 @@ RUN rm -rf *.tar.gz
 RUN curl -sL -O https://github.com/BhallaLab/pymoose-wheels/archive/master.tar.gz 
 RUN ls -la *.gz
 RUN tar xvf master.tar.gz
-RUN cd pymoose-wheels-master && ./build_wheels_linux.sh 3.2.0
+RUN cd pymoose-wheels-master && ./build_wheels_linux.sh v3.2.0

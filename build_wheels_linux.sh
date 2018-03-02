@@ -10,7 +10,7 @@ if [ ! $REVISION ]; then
     exit;
 fi
 
-VERSION=${REVISION%v}
+VERSION=${REVISION#v}
     
 echo "Building revision $REVISION, version $VERSION"
 
