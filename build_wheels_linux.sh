@@ -1,14 +1,19 @@
-#!/bin/bash
+#!/bin/sh
 
-set -e
-set -x
+set -e -x
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
+
+# Place to store wheels.
+WHEELHOUSE=${1-$HOME/wheelhouse}
+echo "Path to store wheels : $WHEELHOUSE"
+mkdir -p $WHEELHOUSE
 
 
 # tag on github and revision number. Make sure that they are there.
 REVISION=v3.2.1
 VERSION=3.2.1
+
 echo "Building revision $REVISION, version $VERSION"
 
 if [ ! -f /usr/local/lib/libgsl.a ]; then 
@@ -36,8 +41,6 @@ fi
 GSL_STATIC_LIBS="/usr/local/lib/libgsl.a;/usr/local/lib/libgslcblas.a"
 CMAKE=/usr/bin/cmake28
 
-WHEELHOUSE=$HOME/wheelhouse
-mkdir -p $WHEELHOUSE
 for PYV in 27 36; do
     PYDIR=/opt/python/cp${PYV}-cp${PYV}m
     PYVER=$(basename $PYDIR)
@@ -60,14 +63,14 @@ for PYV in 27 36; do
     )
 done
 
-echo "Testing ... "
+echo "Installing before testing ... "
 /opt/python/cp27-cp27m/bin/pip install $WHEELHOUSE/pymoose*$VERSION*py2*.whl
 /opt/python/cp36-cp36m/bin/pip install $WHEELHOUSE/pymoose*$VERSION*py3*.whl
 for PYV in 27 36; do
     PYDIR=/opt/python/cp${PYV}-cp${PYV}m
     echo "Building using $PYDIR in $PYVER"
     PYTHON=$(ls $PYDIR/bin/python?.?)
-    $PYTHON -c 'import moose; import moose.utils as mu'
+    $PYTHON -c 'import moose; moose.test( )'
 done
 	
 
