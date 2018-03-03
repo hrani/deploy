@@ -3,8 +3,9 @@ MAINTAINER Dilawar Singh <dilawar.s.rajput@gmail.com>
 
 # If you are behind proxy,  uncomment the following lines with appropriate
 # values. Otherwise comment them out.
-ENV http_proxy http://proxy.ncbs.res.in:3128
-ENV https_proxy http://proxy.ncbs.res.in:3128
+#ENV http_proxy http://proxy.ncbs.res.in:3128
+#ENV https_proxy http://proxy.ncbs.res.in:3128
+
 ENV PATH=/usr/local/bin:$PATH
 
 RUN yum update
@@ -21,4 +22,4 @@ RUN curl -sL -O https://github.com/BhallaLab/pymoose-wheels/archive/master.tar.g
 RUN ls -la *.gz
 RUN tar xvf master.tar.gz
 RUN cd pymoose-wheels-master && ./build_wheels_linux.sh 
-RUN cd pymoose-wheels-master && ./test_and_upload.sh $PYPY_PASSWORD
+RUN cd pymoose-wheels-master && ./test_and_upload.sh $PYPI_PASSWORD

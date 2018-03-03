@@ -39,4 +39,6 @@ rm -rf $HOME/wheelhouse
 mkdir -p $HOME/wheelhouse
 cd $MOOSE_SOURCE_DIR/_build/python/ && delocate-wheel -w $HOME/wheelhouse -v dist/*.whl
 ls $HOME/wheelhouse/pymoose*.whl
-python -m twine upload -u bhallalab -p $PYPI_PASSWORD_BHALLLAB $HOME/wheelhouse/pymoose*.whl
+if [ -z $PYPI_PASSWORD ]; then
+    python -m twine upload -u bhallalab -p $PYPI_PASSWORD $HOME/wheelhouse/pymoose*.whl
+fi

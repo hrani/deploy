@@ -56,11 +56,12 @@ for whl in $WHEELS; do
     fi
 done
 
+# upload to PYPI.
 for whl in $WHEELS; do
-   # If successful, upload using twine.
-   if [ -z $PYPY_PASSWORD ]; then
-       $TWINE upload $whl --user bhallalab --password $PYPY_PASSWORD --skip-existing
-   else
-       echo "PYPY password is not set"
-   fi
+    # If successful, upload using twine.
+    if [ -z $PYPI_PASSWORD ]; then
+        $TWINE upload $whl --user bhallalab --password $PYPI_PASSWORD --skip-existing
+    else
+        echo "PYPI password is not set"
+    fi
 done
