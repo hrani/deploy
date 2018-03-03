@@ -1,4 +1,3 @@
-[![Build Status](https://travis-ci.org/BhallaLab/pymoose-wheels.svg?branch=master)](https://travis-ci.org/BhallaLab/pymoose-wheels)
+[![Build Status](https://travis-ci.org/BhallaLab/ReleaseScripts.svg?branch=master)](https://travis-ci.org/BhallaLab/ReleaseScripts)
 
-# pymoose-wheels
-Wheels of PyMOOSE
+This repository contains scripts to release moose.
