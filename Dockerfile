@@ -11,15 +11,4 @@ ENV PATH=/usr/local/bin:$PATH
 RUN yum update
 RUN yum install -y cmake28 && ln -sf /usr/bin/cmake28 /usr/bin/cmake
 RUN yum install -y wget  
-RUN if [ ! -f /usr/local/lib/libgsl.a ]; then \
-    wget --no-check-certificate ftp://ftp.gnu.org/gnu/gsl/gsl-2.4.tar.gz && \
-    tar xvf gsl-2.4.tar.gz && cd gsl-2.4 && \
-    CFLAGS=-fPIC ./configure --enable-static && make -j4 && \
-    make install && cd ..; fi 
-
-RUN rm -rf *.tar.gz
-RUN curl -sL -O https://github.com/BhallaLab/pymoose-wheels/archive/master.tar.gz 
-RUN ls -la *.gz
-RUN tar xvf master.tar.gz
-RUN cd pymoose-wheels-master && ./build_wheels_linux.sh 
-RUN cd pymoose-wheels-master && ./test_and_upload.sh $PYPI_PASSWORD
+RUN ./build_wheels_linux.sh && ./test_and_upload.sh $PYPI_PASSWORD
