@@ -17,7 +17,7 @@
 #      REVISION:  ---
 #===============================================================================
 
-set -e -x
+set -e 
 set -o nounset                                  # Treat unset variables as an error
 GLOBAL_PIP=/opt/python/cp27-cp27m/bin/pip
 GLOBAL_PY=/opt/python/cp27-cp27m/bin/python
@@ -59,7 +59,7 @@ done
 # upload to PYPI.
 for whl in $WHEELS; do
     # If successful, upload using twine.
-    if [ -z $PYPI_PASSWORD ]; then
+    if [ -n "$PYPI_PASSWORD" ]; then
         $TWINE upload $whl --user bhallalab --password $PYPI_PASSWORD --skip-existing
     else
         echo "PYPI password is not set"
