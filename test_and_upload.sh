@@ -46,8 +46,6 @@ for whl in $WHEELS; do
        set -e
        $PIP install $whl
        $PYTHON /tmp/test.py
-       # If successful, upload using twine.
-       $TWINE upload $whl --user bhallalab --password $PYPY_PASSWORD --skip-existing
     else
        echo "++ Python3 wheel $whl";
        PYTHON=/opt/python/cp36-cp36m/bin/python
@@ -55,7 +53,14 @@ for whl in $WHEELS; do
        set -e
        $PIP install $whl
        $PYTHON /tmp/test.py
-       $TWINE upload $whl --user bhallalab --password $PYPY_PASSWORD --skip-existing
     fi
 done
 
+for whl in $WHEELS; do
+   # If successful, upload using twine.
+   if [ -z $PYPY_PASSWORD ]; then
+       $TWINE upload $whl --user bhallalab --password $PYPY_PASSWORD --skip-existing
+   else
+       echo "PYPY password is not set"
+   fi
+done
