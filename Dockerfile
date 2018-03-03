@@ -3,8 +3,8 @@ MAINTAINER Dilawar Singh <dilawar.s.rajput@gmail.com>
 
 # If you are behind proxy,  uncomment the following lines with appropriate
 # values. Otherwise comment them out.
-#ENV http_proxy http://proxy.ncbs.res.in:3128
-#ENV https_proxy http://proxy.ncbs.res.in:3128
+ENV http_proxy http://proxy.ncbs.res.in:3128
+ENV https_proxy http://proxy.ncbs.res.in:3128
 
 ENV PATH=/usr/local/bin:$PATH
 

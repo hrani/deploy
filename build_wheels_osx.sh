@@ -2,8 +2,8 @@
 
 set -e -x
 
-RELEASE=v3.1.3
-VERSION=3.1.3
+RELEASE=$(cat ./RELEASE)
+VERSION=$(cat ./VERSION)
 
 brew install gsl 
 sudo /usr/bin/easy_install virtualenv
