@@ -18,6 +18,7 @@
 #===============================================================================
 
 set -e 
+set -x
 set -o nounset                                  # Treat unset variables as an error
 GLOBAL_PIP=/opt/python/cp27-cp27m/bin/pip
 GLOBAL_PY=/opt/python/cp27-cp27m/bin/python
@@ -36,8 +37,7 @@ moose.reinit( )
 moose.start( 1 )
 EOF
 
-WHEELS=$(ls $HOME/wheelhouse/pymoose*.whl)
-for whl in $WHEELS; do
+for whl in `find $HOME/wheelhouse -name "*.whl"`; do
     echo "Wheel $whl"
     if [[ $whl = *"-py2-"* ]]; then 
        echo "++ Python2 wheel $whl";
