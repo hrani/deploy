@@ -64,8 +64,8 @@ for PYV in 27 36; do
 done
 
 echo "Installing before testing ... "
-/opt/python/cp27-cp27m/bin/pip install $WHEELHOUSE/pymoose*$VERSION*py2*.whl
-/opt/python/cp36-cp36m/bin/pip install $WHEELHOUSE/pymoose*$VERSION*py3*.whl
+/opt/python/cp27-cp27m/bin/pip install $WHEELHOUSE/pymoose-$VERSION-py2-none-any.whl
+/opt/python/cp36-cp36m/bin/pip install $WHEELHOUSE/pymoose-$VERSION-py3-none-any.whl
 for PYV in 27 36; do
     PYDIR=/opt/python/cp${PYV}-cp${PYV}m
     echo "Building using $PYDIR in $PYVER"
