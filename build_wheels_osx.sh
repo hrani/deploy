@@ -4,13 +4,9 @@ set -e -x
 
 RELEASE=$(cat ./RELEASE)
 VERSION=$(cat ./VERSION)
+echo "Create virtualenv by yourself"
 
 brew install gsl 
-sudo /usr/bin/easy_install virtualenv
-# setup virtualenv
-virtualenv -p /usr/bin/python $HOME/python2
-source $HOME/python2/bin/activate
-
 pip install setuptools --upgrade
 pip install wheel --upgrade
 pip install numpy --upgrade
