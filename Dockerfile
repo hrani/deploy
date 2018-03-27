@@ -1,8 +1,6 @@
 FROM quay.io/pypa/manylinux1_x86_64
 MAINTAINER Dilawar Singh <dilawar.s.rajput@gmail.com>
 
-ADD . $HOME/wheelhouse
-
 # If you are behind proxy,  uncomment the following lines with appropriate
 # values. Otherwise comment them out.
 ENV http_proxy http://proxy.ncbs.res.in:3128

@@ -58,10 +58,13 @@ done
 
 # upload to PYPI.
 for whl in $WHEELS; do
+    mkdir -p /tmp/wheelhouse
     # If successful, upload using twine.
     if [ -n "$PYPI_PASSWORD" ]; then
         $TWINE upload $whl --user bhallalab --password $PYPI_PASSWORD --skip-existing
     else
         echo "PYPI password is not set"
+        echo "Copying to /tmp/wheelhouse"
+        cp $whl /tmp/wheelhouse/
     fi
 done
