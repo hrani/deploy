@@ -45,6 +45,7 @@ for PYV in 27 36; do
         echo "Building using $PYDIR in $PYVER"
         PYTHON=$(ls $PYDIR/bin/python?.?)
         $PYTHON -m pip install numpy
+        $PYTHON -m pip uninstall pymoose  -y
         git clean -fxd . && git pull 
         $CMAKE -DPYTHON_EXECUTABLE=$PYTHON  \
             -DGSL_STATIC_LIBRARIES=$GSL_STATIC_LIBS \
