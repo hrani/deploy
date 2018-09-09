@@ -9,7 +9,7 @@ fi
 
 function buildRepo {
     echo "  Building for $1" 
-    osc build "$1"
+    osc build "$1" --noverify --trust-all-projects
 }
 
 (
