@@ -1,9 +1,9 @@
 #!/bin/bash
-
 set -e -x
 
 RELEASE=$(cat ./RELEASE)
 VERSION=$(cat ./VERSION)
+BRANCH=$(cat ./BRANCH)
 echo "Create virtualenv by yourself"
 
 brew install gsl 
@@ -18,7 +18,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 MOOSE_SOURCE_DIR=`pwd`/moose-core
 
 if [ ! -d $MOOSE_SOURCE_DIR ]; then
-	git clone https://github.com/BhallaLab/moose-core -b $RELEASE --depth 10
+	git clone https://github.com/BhallaLab/moose-core -b $BRANCH --depth 10
 fi
 cd moose-core && git pull
 WHEELHOUSE=$HOME/wheelhouse
@@ -30,7 +30,7 @@ PLATFORM=$(python -c "import distutils.util; print(distutils.util.get_platform()
 	mkdir -p _build && cd _build
 	echo "Building wheel for $PLATFORM"
 	cmake -DVERSION_MOOSE=$VERSION -DDEBUG=OFF -DCMAKE_RELEASE_TYPE=Release ..
-	make -j3 
+	make -j`nproc`
 	( 
 		cd python 
 		ls *.py

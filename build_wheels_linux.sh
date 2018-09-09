@@ -12,7 +12,8 @@ mkdir -p $WHEELHOUSE
 
 # tag on github and revision number. Make sure that they are there.
 REVISION=$(cat ./RELEASE)
-VERSION=$(cat ./VERSION)
+BRANCH=$(cat ./BRANCH)
+VERSION=$(date +%Y%m%d)
 
 echo "Building revision $REVISION, version $VERSION"
 
@@ -24,17 +25,11 @@ if [ ! -f /usr/local/lib/libgsl.a ]; then
     make install 
     cd ..
 fi 
-rm -rf *.tar.gz
-rm -rf moose-core*
 
-curl -O -sL https://github.com/BhallaLab/moose-core/archive/$REVISION.tar.gz
-tar xvf $REVISION.tar.gz
-
-MOOSE_SOURCE_DIR=$SCRIPT_DIR/moose-core-$VERSION
+MOOSE_SOURCE_DIR=$SCRIPT_DIR/moose-core
 
 if [ ! -d $MOOSE_SOURCE_DIR ]; then
-    echo "$MOOSE_SOURCE_DIR is not found."
-    exit
+    git clone https://github.com/BhallaLab/moose-core --depth 10 --branch $BRANCH
 fi
 
 # Try to link statically.
@@ -50,6 +45,7 @@ for PYV in 27 36; do
         echo "Building using $PYDIR in $PYVER"
         PYTHON=$(ls $PYDIR/bin/python?.?)
         $PYTHON -m pip install numpy
+        git clean -fxd . && git pull 
         $CMAKE -DPYTHON_EXECUTABLE=$PYTHON  \
             -DGSL_STATIC_LIBRARIES=$GSL_STATIC_LIBS \
             -DVERSION_MOOSE=$VERSION \
@@ -73,7 +69,6 @@ for PYV in 27 36; do
     $PYTHON -c 'import moose; moose.test( )'
 done
 	
-
 # now check the wheels.
 for whl in $WHEELHOUSE/*.whl; do
     auditwheel show "$whl"
