@@ -3,7 +3,7 @@ set -e -x
 
 RELEASE=$(cat ./RELEASE)
 BRANCH=$(cat ./BRANCH)
-VERSION=$(date +%Y%m%d)
+VERSION=3.2.0.dev$(date +%Y%m%d)
 
 echo "Create virtualenv by yourself"
 
