@@ -2,8 +2,9 @@
 set -e -x
 
 RELEASE=$(cat ./RELEASE)
-VERSION=$(cat ./VERSION)
 BRANCH=$(cat ./BRANCH)
+VERSION=$(date +%Y%m%d)
+
 echo "Create virtualenv by yourself"
 
 brew install gsl 
