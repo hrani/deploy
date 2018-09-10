@@ -14,7 +14,7 @@ mkdir -p $WHEELHOUSE
 BRANCH=$(cat ./BRANCH)
 VERSION="3.2.0.dev$(date +%Y%m%d)"
 
-echo "Building revision $REVISION, version $VERSION"
+echo "Building version $REVISION, from branch $BRANCH"
 
 if [ ! -f /usr/local/lib/libgsl.a ]; then 
     wget --no-check-certificate ftp://ftp.gnu.org/gnu/gsl/gsl-2.4.tar.gz 
@@ -45,7 +45,8 @@ for PYV in 36 27; do
         PYTHON=$(ls $PYDIR/bin/python?.?)
         $PYTHON -m pip install numpy
         $PYTHON -m pip uninstall pymoose  -y
-        git clean -fxd . && git pull origin $BRANCH
+        git clean -fxd .
+	git pull origin $BRANCH || echo "Failed to pull $BRANCH"
         $CMAKE -DPYTHON_EXECUTABLE=$PYTHON  \
             -DGSL_STATIC_LIBRARIES=$GSL_STATIC_LIBS \
             -DVERSION_MOOSE=$VERSION \
