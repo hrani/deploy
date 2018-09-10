@@ -36,7 +36,7 @@ fi
 GSL_STATIC_LIBS="/usr/local/lib/libgsl.a;/usr/local/lib/libgslcblas.a"
 CMAKE=/usr/bin/cmake28
 
-for PYV in 27 36; do
+for PYV in 36 27; do
     PYDIR=/opt/python/cp${PYV}-cp${PYV}m
     PYVER=$(basename $PYDIR)
     mkdir -p $PYVER
@@ -46,7 +46,7 @@ for PYV in 27 36; do
         PYTHON=$(ls $PYDIR/bin/python?.?)
         $PYTHON -m pip install numpy
         $PYTHON -m pip uninstall pymoose  -y
-        git clean -fxd . && git pull 
+        git clean -fxd . && git pull origin $BRANCH
         $CMAKE -DPYTHON_EXECUTABLE=$PYTHON  \
             -DGSL_STATIC_LIBRARIES=$GSL_STATIC_LIBS \
             -DVERSION_MOOSE=$VERSION \
@@ -63,11 +63,11 @@ done
 echo "Installing before testing ... "
 /opt/python/cp27-cp27m/bin/pip install $WHEELHOUSE/pymoose-$VERSION-py2-none-any.whl
 /opt/python/cp36-cp36m/bin/pip install $WHEELHOUSE/pymoose-$VERSION-py3-none-any.whl
-for PYV in 27 36; do
+for PYV in 36 27; do
     PYDIR=/opt/python/cp${PYV}-cp${PYV}m
     echo "Building using $PYDIR in $PYVER"
     PYTHON=$(ls $PYDIR/bin/python?.?)
-    $PYTHON -c 'import moose; print(moose.__file__) )'
+    $PYTHON -c 'import moose; print(moose.__file__)'
 done
 	
 # now check the wheels.
