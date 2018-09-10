@@ -43,8 +43,8 @@ for PYV in 36 27; do
         cd $PYVER
         echo "Building using $PYDIR in $PYVER"
         PYTHON=$(ls $PYDIR/bin/python?.?)
-        $PYTHON -m pip install numpy
-        $PYTHON -m pip uninstall pymoose  -y
+        $PYTHON -m pip install numpy matplotlib
+        $PYTHON -m pip uninstall pymoose -y
         git clean -fxd .
 	git pull origin $BRANCH || echo "Failed to pull $BRANCH"
         $CMAKE -DPYTHON_EXECUTABLE=$PYTHON  \
@@ -67,7 +67,7 @@ for PYV in 36 27; do
     PYDIR=/opt/python/cp${PYV}-cp${PYV}m
     echo "Building using $PYDIR in $PYVER"
     PYTHON=$(ls $PYDIR/bin/python?.?)
-    $PYTHON -c 'import moose; print(moose.__file__)'
+    $PYTHON -c 'import moose; print(moose.test())'
 done
 	
 # now check the wheels.
