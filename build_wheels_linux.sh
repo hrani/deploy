@@ -67,7 +67,7 @@ for PYV in 27 36; do
     PYDIR=/opt/python/cp${PYV}-cp${PYV}m
     echo "Building using $PYDIR in $PYVER"
     PYTHON=$(ls $PYDIR/bin/python?.?)
-    $PYTHON -c 'import moose; moose.test( )'
+    $PYTHON -c 'import moose; print(moose.__file__) )'
 done
 	
 # now check the wheels.
