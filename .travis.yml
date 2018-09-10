@@ -8,5 +8,5 @@ services:
     - docker
 
 script:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; ./build_wheels_osx.sh      ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; make   ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./build_wheels_osx.sh      ; fi
+    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then make   ; fi
