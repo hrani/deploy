@@ -19,7 +19,13 @@ cd moose-core && git pull
 WHEELHOUSE=$HOME/wheelhouse
 mkdir -p $WHEELHOUSE
 
-for PYTHON in /usr/bin/python /usr/local/bin/python3; do
+# Always prefer brew version.
+for PYTHON in /usr/local/bin/python2 /usr/local/bin/python3; do
+    if [ ! -f $PYTHON ]; then
+        echo "Not found $PYTHON"
+        continue
+    fi
+
     $PYTHON -m pip install setuptools --upgrade
     $PYTHON -m pip install wheel --upgrade
     $PYTHON -m pip install numpy --upgrade
@@ -32,9 +38,10 @@ for PYTHON in /usr/bin/python /usr/local/bin/python3; do
         echo "Building wheel for $PLATFORM"
         cmake -DVERSION_MOOSE=$VERSION \
             -DCMAKE_RELEASE_TYPE=Release \
+            -DWITH_HDF=OFF \
             -DPYTHON_EXECUTABLE=$PYTHON \
             ..
-        make -j`nproc`
+        make -j4
         ( 
                 cd python 
                 ls *.py
