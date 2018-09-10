@@ -46,7 +46,7 @@ for PYV in 36 27; do
         $PYTHON -m pip install numpy matplotlib
         $PYTHON -m pip uninstall pymoose -y
         git clean -fxd .
-	git pull origin $BRANCH || echo "Failed to pull $BRANCH"
+	git pull || echo "Failed to pull $BRANCH"
         $CMAKE -DPYTHON_EXECUTABLE=$PYTHON  \
             -DGSL_STATIC_LIBRARIES=$GSL_STATIC_LIBS \
             -DVERSION_MOOSE=$VERSION \
@@ -67,7 +67,7 @@ for PYV in 36 27; do
     PYDIR=/opt/python/cp${PYV}-cp${PYV}m
     echo "Building using $PYDIR in $PYVER"
     PYTHON=$(ls $PYDIR/bin/python?.?)
-    $PYTHON -c 'import moose; print(moose.test())'
+    $PYTHON -c 'import moose; print(moose.version())'
 done
 	
 # now check the wheels.
