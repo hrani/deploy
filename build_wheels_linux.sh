@@ -9,7 +9,6 @@ WHEELHOUSE=${1-$HOME/wheelhouse}
 echo "Path to store wheels : $WHEELHOUSE"
 mkdir -p $WHEELHOUSE
 
-
 # tag on github and revision number. Make sure that they are there.
 BRANCH=$(cat ./BRANCH)
 VERSION="3.2.0.dev$(date +%Y%m%d)"
@@ -45,7 +44,6 @@ for PYV in 36 27; do
         PYTHON=$(ls $PYDIR/bin/python?.?)
         $PYTHON -m pip install numpy matplotlib
         $PYTHON -m pip uninstall pymoose -y
-        git clean -fxd .
 	git pull || echo "Failed to pull $BRANCH"
         $CMAKE -DPYTHON_EXECUTABLE=$PYTHON  \
             -DGSL_STATIC_LIBRARIES=$GSL_STATIC_LIBS \
@@ -60,19 +58,20 @@ for PYV in 36 27; do
     )
 done
 
+# now check the wheels.
+for whl in $WHEELHOUSE/*.whl; do
+    auditwheel show "$whl"
+done
+
 echo "Installing before testing ... "
 /opt/python/cp27-cp27m/bin/pip install $WHEELHOUSE/pymoose-$VERSION-py2-none-any.whl
 /opt/python/cp36-cp36m/bin/pip install $WHEELHOUSE/pymoose-$VERSION-py3-none-any.whl
 for PYV in 36 27; do
     PYDIR=/opt/python/cp${PYV}-cp${PYV}m
-    echo "Building using $PYDIR in $PYVER"
     PYTHON=$(ls $PYDIR/bin/python?.?)
-    $PYTHON -c 'import moose; print(moose.version())'
+    echo " -- Installing for $PYTHON ... "
+    $PYTHON -c 'import moose; print( moose.__version__ )'
 done
 	
-# now check the wheels.
-for whl in $WHEELHOUSE/*.whl; do
-    auditwheel show "$whl"
-done
 
 ls -lh $WHEELHOUSE/*.whl
