@@ -12,7 +12,7 @@ mkdir -p $WHEELHOUSE
 
 # tag on github and revision number. Make sure that they are there.
 REVISION=$(cat ./RELEASE)
-VERSION=$(cat ./VERSION)
+VERSION=$(date +%Y%m%d)
 
 echo "Building revision $REVISION, version $VERSION"
 
