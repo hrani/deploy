@@ -26,11 +26,11 @@ for PYTHON in /usr/local/bin/python2 /usr/local/bin/python3; do
         continue
     fi
 
-    $PYTHON -m pip install setuptools --upgrade
-    $PYTHON -m pip install wheel --upgrade
-    $PYTHON -m pip install numpy --upgrade
-    $PYTHON -m pip install delocate --upgrade 
-    $PYTHON -m pip install twine  --upgrade 
+    $PYTHON -m pip install setuptools --upgrade --user
+    $PYTHON -m pip install wheel --upgrade --user
+    $PYTHON -m pip install numpy --upgrade --user
+    $PYTHON -m pip install delocate --upgrade  --user
+    $PYTHON -m pip install twine  --upgrade  --user
     PLATFORM=$($PYTHON -c "import distutils.util; print(distutils.util.get_platform())")
     ( 
         cd $MOOSE_SOURCE_DIR
