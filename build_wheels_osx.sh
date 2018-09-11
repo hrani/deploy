@@ -1,47 +1,80 @@
 #!/bin/bash
+set -e 
 
-set -e -x
+BRANCH=$(cat ./BRANCH)
+VERSION=3.2.0.dev$(date +%Y%m%d)
 
-RELEASE=$(cat ./RELEASE)
-VERSION=$(cat ./VERSION)
-echo "Create virtualenv by yourself"
+echo "[INFO] Create virtualenv by yourself"
 
 brew install gsl 
-pip install setuptools --upgrade
-pip install wheel --upgrade
-pip install numpy --upgrade
-pip install delocate --upgrade 
-pip install twine  --upgrade 
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
 MOOSE_SOURCE_DIR=`pwd`/moose-core
 
 if [ ! -d $MOOSE_SOURCE_DIR ]; then
-	git clone https://github.com/BhallaLab/moose-core -b $RELEASE --depth 10
+    git clone https://github.com/BhallaLab/moose-core -b $BRANCH --depth 10
 fi
 cd moose-core && git pull
 WHEELHOUSE=$HOME/wheelhouse
 mkdir -p $WHEELHOUSE
 
-PLATFORM=$(python -c "import distutils.util; print(distutils.util.get_platform())")
-( 
-	cd $MOOSE_SOURCE_DIR
-	mkdir -p _build && cd _build
-	echo "Building wheel for $PLATFORM"
-	cmake -DVERSION_MOOSE=$VERSION -DDEBUG=OFF -DCMAKE_RELEASE_TYPE=Release ..
-	make -j3 
-	( 
-		cd python 
-		ls *.py
-		sed "s/from distutils.*setup/from setuptools import setup/g" setup.cmake.py > setup.wheel.py
-		python setup.wheel.py bdist_wheel -p $PLATFORM 
-		# Now fix the wheel using delocate.
-		delocate-wheel -w $WHEELHOUSE -v dist/*.whl
-	)
-	ls $WHEELHOUSE/pymoose*.whl
-)
+# Always prefer brew version.
+for _py in 3 2; do
+    PYTHON=/usr/local/bin/python$_py
 
-if [ -n "$PYPI_PASSWORD" ]; then
-    python -m twine upload -u bhallalab -p $PYPI_PASSWORD $HOME/wheelhouse/pymoose*.whl
-fi
+    if [ ! -f $PYTHON ]; then
+        echo "Not found $PYTHON"
+        continue
+    fi
+
+    $PYTHON -m pip install setuptools --upgrade --user
+    $PYTHON -m pip install wheel --upgrade --user
+    $PYTHON -m pip install numpy --upgrade --user
+    $PYTHON -m pip install delocate --upgrade  --user
+    $PYTHON -m pip install twine  --upgrade  --user
+
+    PLATFORM=$($PYTHON -c "import distutils.util; print(distutils.util.get_platform())")
+
+    ( 
+        cd $MOOSE_SOURCE_DIR
+        mkdir -p _build && cd _build
+        echo "Building wheel for $PLATFORM"
+        cmake -DVERSION_MOOSE=$VERSION \
+            -DCMAKE_RELEASE_TYPE=Release \
+            -DWITH_HDF=OFF \
+            -DPYTHON_EXECUTABLE=$PYTHON \
+            ..
+
+        make -j4
+        ( 
+            cd python 
+            ls *.py
+            sed "s/from distutils.*setup/from setuptools import setup/g" setup.cmake.py > setup.wheel.py
+            $PYTHON setup.wheel.py bdist_wheel -p $PLATFORM 
+            # Now fix the wheel using delocate.
+            delocate-wheel -w $WHEELHOUSE -v dist/*.whl
+        )
+
+        ls $WHEELHOUSE/pymoose*-py${_py}-*.whl
+
+        # create a virtualenv and test this.
+        rm -rf $HOME/Py${_py}
+        (
+            virtualenv -p $PYTHON $HOME/Py${_py}
+            source $HOME/Py${_py}/bin/activate
+            set +x 
+            python -m pip install $WHEELHOUSE/pymoose*-py${_py}-*.whl
+            set -x
+            which python
+            python --version
+            python -c 'import moose; print( moose.__version__ )'
+            deactivate
+        )
+    )
+
+    if [ -n "$PYPI_PASSWORD" ]; then
+        echo "Did you test the wheels?"
+        $PYTHON -m twine upload -u dilawar -p $PYPI_PASSWORD $HOME/wheelhouse/pymoose*.whl
+    fi
+done
