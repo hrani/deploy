@@ -21,7 +21,7 @@ mkdir -p $WHEELHOUSE
 
 # Always prefer brew version.
 for _py in 3 2; do
-    PYTHON=/usr/loca/bin/python$_py
+    PYTHON=/usr/local/bin/python$_py
 
     if [ ! -f $PYTHON ]; then
         echo "Not found $PYTHON"
@@ -56,19 +56,25 @@ for _py in 3 2; do
             delocate-wheel -w $WHEELHOUSE -v dist/*.whl
         )
 
-        ls $WHEELHOUSE/pymoose*-py$P{_py}-.whl
+        ls $WHEELHOUSE/pymoose*-py${_py}-*.whl
 
         # create a virtualenv and test this.
-        virtualenv -p $PYTHON $HOME/Py${_py}
+        rm -rf $HOME/Py${_py}
         (
+            virtualenv -p $PYTHON $HOME/Py${_py}
             source $HOME/Py${_py}/bin/activate
-            pip install $WHEELHOUSE/pymoose*-py${_py}-*.whl
+            set +x 
+            python -m pip install $WHEELHOUSE/pymoose*-py${_py}-*.whl
+            set -x
+            which python
+            python --version
             python -c 'import moose; print( moose.__version__ )'
+            deactivate
         )
     )
 
     if [ -n "$PYPI_PASSWORD" ]; then
         echo "Did you test the wheels?"
-        $PYTHON -m twine upload -u bhallalab -p $PYPI_PASSWORD $HOME/wheelhouse/pymoose*.whl
+        $PYTHON -m twine upload -u dilawar -p $PYPI_PASSWORD $HOME/wheelhouse/pymoose*.whl
     fi
 done
