@@ -4,7 +4,7 @@ set -e
 set -x
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-NPROC=`nproc`
+NPROC=$(cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l)
 NUM_WORKERS=$((NPROC/2))
 
 if [ "$TRAVIS" == "true" ]; then
