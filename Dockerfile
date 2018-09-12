@@ -10,4 +10,4 @@ RUN curl -sL -O https://github.com/BhallaLab/deploy/archive/master.tar.gz
 RUN ls -la *.gz
 RUN tar xvf master.tar.gz
 RUN cd deploy-master && ./build_wheels_linux.sh 
-RUN cd deploy-master && ./test_and_upload.sh $PYPI_PASSWORD
+RUN cd deploy-master && ./test_and_upload.sh "$PYPI_PASSWORD"

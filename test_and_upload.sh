@@ -52,6 +52,7 @@ for whl in `find $HOME/wheelhouse -name "pymoose*.whl"`; do
     fi
 done
 
+PYPI_PASSWORD="$1"
 # upload to PYPI.
 for whl in `find $HOME/wheelhouse -name "pymoose*.whl"`; do
     mkdir -p /tmp/wheelhouse
