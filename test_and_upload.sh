@@ -53,7 +53,7 @@ for whl in `find $HOME/wheelhouse -name "pymoose*.whl"`; do
 done
 
 # upload to PYPI.
-for whl in $WHEELS; do
+for whl in `find $HOME/wheelhouse -name "pymoose*.whl"`; do
     mkdir -p /tmp/wheelhouse
     # If successful, upload using twine.
     if [ -n "$PYPI_PASSWORD" ]; then
