@@ -11,7 +11,7 @@
 #  REQUIREMENTS: ---
 #          BUGS: ---
 #         NOTES: ---
-#        AUTHOR: Dilawar Singh (), dilawars@ncbs.res.in
+#        AUTHOR: Dilawar Singh (), bhallalabs@ncbs.res.in
 #  ORGANIZATION: NCBS Bangalore
 #       CREATED: Saturday 03 March 2018 09:56:20  IST
 #      REVISION:  ---
