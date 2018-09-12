@@ -10,6 +10,5 @@ wheels : ./Dockerfile ./build_wheels_linux.sh
 	    --no-cache \
 	    --build-arg HTTPS_PROXY="http://proxy.ncbs.res.in:3128/" \
 	    --build-arg HTTP_PROXY="http://proxy.ncbs.res.in:3128/" \
-	    --build-arg NUM_WORKERS=8 \
 	    -t $(DOCKERFILE) \
 	    --build-arg PYPI_PASSWORD=$(PYPI_PASSWORD)  . 
