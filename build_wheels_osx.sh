@@ -1,12 +1,12 @@
 #!/bin/bash
 set -e 
+set -x
 
 BRANCH=$(cat ./BRANCH)
 VERSION=3.2.0.dev$(date +%Y%m%d)
 
-echo "[INFO] Create virtualenv by yourself"
-
 brew install gsl 
+brew install python python2
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -18,7 +18,8 @@ fi
 cd moose-core && git pull
 WHEELHOUSE=$HOME/wheelhouse
 mkdir -p $WHEELHOUSE
-/usr/local/bin/python -m pip install delocate --user --upgrade
+sudo /usr/local/bin/python3 -m pip install delocate virtualenv
+DELOCATE_WHEEL=/usr/local/bin/delocate-wheel
 
 # Always prefer brew version.
 for _py in 3 2; do
@@ -50,10 +51,11 @@ for _py in 3 2; do
         ( 
             cd python 
             ls *.py
-            sed "s/from distutils.*setup/from setuptools import setup/g" setup.cmake.py > setup.wheel.py
+            sed "s/from distutils.*setup/from setuptools import setup/g" \
+                setup.cmake.py > setup.wheel.py
             $PYTHON setup.wheel.py bdist_wheel -p $PLATFORM 
             # Now fix the wheel using delocate.
-            ~/.local/bin/delocate-wheel -w $WHEELHOUSE -v dist/*.whl
+            $DELOCATE_WHEEL -w $WHEELHOUSE -v dist/*.whl
         )
 
         ls $WHEELHOUSE/pymoose*-py${_py}-*.whl
@@ -66,6 +68,7 @@ for _py in 3 2; do
             set +x 
             python -m pip install $WHEELHOUSE/pymoose*-py${_py}-*.whl
             set -x
+            echo "Testing wheel in virtualenv"
             which python
             python --version
             python -c 'import moose; print( moose.__version__ )'
@@ -73,8 +76,9 @@ for _py in 3 2; do
         )
     )
 
-    if [ -n "$PYPI_PASSWORD" ]; then
-        echo "Did you test the wheels?"
-        $PYTHON -m twine upload -u bhallalab -p $PYPI_PASSWORD $HOME/wheelhouse/pymoose*.whl
+    if [ ! -z "$PYPI_PASSWORD" ]; then
+        echo "Did you test the wheels? I am uploading anyway ..."
+        $PYTHON -m twine upload -u bhallalab -p $PYPI_PASSWORD \
+            $HOME/wheelhouse/pymoose*.whl
     fi
 done
