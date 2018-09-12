@@ -29,11 +29,7 @@ cat <<EOF >/tmp/test.py
 import moose
 import moose.utils as mu
 print( moose.__version__ )
-import rdesigneur as rd
-rdes = rd.rdesigneur()
-rdes.buildModel()
-moose.showfields( rdes.soma )
-moose.reinit( )
+moose.reinit()
 moose.start( 1 )
 EOF
 
