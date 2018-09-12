@@ -8,6 +8,6 @@ wheels : ./Dockerfile ./build_wheels_linux.sh
 	mkdir -p $(HOME)/wheelhouse
 	docker build  \
 	    --build-arg HTTPS_PROXY="http://proxy.ncbs.res.in:3128/" \
-	    HTTP_PROXY="http://proxy.ncbs.res.in:3128/" \
-	    PYPI_PASSWORD=$(PYPI_PASSWORD) \
+	    --build-arg HTTP_PROXY="http://proxy.ncbs.res.in:3128/" \
+	    --build-arg PYPI_PASSWORD=$(PYPI_PASSWORD) \
 	    -t $(DOCKERFILE) .
