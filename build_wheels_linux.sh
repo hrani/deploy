@@ -20,7 +20,7 @@ if [ ! -f /usr/local/lib/libgsl.a ]; then
     /usr/local/bin/curl -O https://ftp.gnu.org/gnu/gsl/gsl-2.4.tar.gz
     tar xvf gsl-2.4.tar.gz 
     cd gsl-2.4 
-    CFLAGS=-fPIC ./configure --enable-static && make -j`nproc`
+    CFLAGS=-fPIC ./configure --enable-static && make 
     make install 
     cd ..
 fi 
@@ -50,7 +50,7 @@ for PYV in 36 27; do
             -DGSL_STATIC_LIBRARIES=$GSL_STATIC_LIBS \
             -DVERSION_MOOSE=$VERSION \
             ${MOOSE_SOURCE_DIR}
-        make -j`nproc`
+        make 
         
         # Now build bdist_wheel
         cd python
