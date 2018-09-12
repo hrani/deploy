@@ -76,3 +76,6 @@ done
 	
 
 ls -lh $WHEELHOUSE/*.whl
+if [ ! -z PYPI_PASSWORD ]; then
+    twine upload $WHEELHOUSE/pymoose*.whl --user dilawar  --password $PYPI_PASSWORD
+fi

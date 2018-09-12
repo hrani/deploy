@@ -8,4 +8,4 @@ wheels : ./Dockerfile ./build_wheels_linux.sh
 	mkdir -p $(HOME)/wheelhouse
 	docker build  --no-cache \
 	    -t $(DOCKERFILE) \
-	    --build-arg PYPY_PASSWORD=$(PYPY_PASSWORD)  . | tee log
+	    --build-arg PYPI_PASSWORD=$(PYPI_PASSWORD)  . | tee log
