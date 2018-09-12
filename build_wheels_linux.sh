@@ -4,7 +4,7 @@ set -e
 set -x
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-NPROC=$(nproc)
+NPROC=`nproc`
 NUM_WORKERS=$((NPROC/2))
 
 if [ "$TRAVIS" == "true" ]; then
@@ -28,7 +28,7 @@ if [ ! -f /usr/local/lib/libgsl.a ]; then
     /usr/local/bin/curl -O https://ftp.gnu.org/gnu/gsl/gsl-2.4.tar.gz
     tar xvf gsl-2.4.tar.gz 
     cd gsl-2.4 
-    CFLAGS=-fPIC ./configure --enable-static && make  $MAKEOPTS
+    CFLAGS=-fPIC ./configure --enable-static && make $MAKEOPTS
     make install 
     cd ..
 fi 
