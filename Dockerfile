@@ -1,5 +1,9 @@
 FROM quay.io/pypa/manylinux1_x86_64
+
 ARG PYPI_PASSWORD
+ARG HTTP_PROXY=""
+ARG HTTPS_PROXY=""
+
 
 MAINTAINER Dilawar Singh <dilawar.s.rajput@gmail.com>
 ENV PATH=/usr/local/bin:$PATH
