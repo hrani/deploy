@@ -4,7 +4,13 @@ set -e
 set -x
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
-export MAKEOPTS="-jNUM_WORKERS"
+NPROC=$(nproc)
+NUM_WORKERS=$((NPROC/2))
+
+if [ "$TRAVIS" == "true" ]; then
+    NUM_WORKERS=2
+fi
+MAKEOPTS="-jNUM_WORKERS"
 
 # Place to store wheels.
 WHEELHOUSE=${1-$HOME/wheelhouse}
