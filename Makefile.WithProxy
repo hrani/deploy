@@ -11,4 +11,4 @@ wheels : ./Dockerfile ./build_wheels_linux.sh
 	    --build-arg HTTPS_PROXY="http://proxy.ncbs.res.in:3128/" \
 	    --build-arg HTTP_PROXY="http://proxy.ncbs.res.in:3128/" \
 	    -t $(DOCKERFILE) \
-	    --build-arg PYPY_PASSWORD=$(PYPY_PASSWORD)  . | tee log
+	    --build-arg PYPI_PASSWORD=$(PYPI_PASSWORD)  . | tee log
