@@ -16,7 +16,8 @@ VERSION="3.2.0.dev$(date +%Y%m%d)"
 echo "Building version $REVISION, from branch $BRANCH"
 
 if [ ! -f /usr/local/lib/libgsl.a ]; then 
-    wget --no-check-certificate ftp://ftp.gnu.org/gnu/gsl/gsl-2.4.tar.gz 
+    #wget --no-check-certificate ftp://ftp.gnu.org/gnu/gsl/gsl-2.4.tar.gz 
+    curl -O ftp://ftp.gnu.org/gnu/gsl/gsl-2.4.tar.gz 
     tar xvf gsl-2.4.tar.gz 
     cd gsl-2.4 
     CFLAGS=-fPIC ./configure --enable-static && make -j`nproc`
