@@ -10,7 +10,7 @@ NUM_WORKERS=$((NPROC/2))
 if [ "$TRAVIS" == "true" ]; then
     NUM_WORKERS=2
 fi
-MAKEOPTS="-jNUM_WORKERS"
+MAKEOPTS="-j$NUM_WORKERS"
 
 # Place to store wheels.
 WHEELHOUSE=${1-$HOME/wheelhouse}
