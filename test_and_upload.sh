@@ -37,7 +37,7 @@ moose.reinit( )
 moose.start( 1 )
 EOF
 
-for whl in `find $HOME/wheelhouse -name "*.whl"`; do
+for whl in `find $HOME/wheelhouse -name "pymoose*.whl"`; do
     echo "Wheel $whl"
     if [[ $whl = *"-py2-"* ]]; then 
        echo "++ Python2 wheel $whl";
