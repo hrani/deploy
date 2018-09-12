@@ -1,6 +1,7 @@
 #!/bin/sh
 
 set -e 
+set -x
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -76,6 +77,3 @@ done
 	
 
 ls -lh $WHEELHOUSE/*.whl
-if [ ! -z PYPI_PASSWORD ]; then
-    /opt/python/cp27-cp27m/bin/python -m twine upload $WHEELHOUSE/pymoose*.whl --user bhallalab  --password $PYPI_PASSWORD
-fi
