@@ -18,6 +18,7 @@ fi
 cd moose-core && git pull
 WHEELHOUSE=$HOME/wheelhouse
 mkdir -p $WHEELHOUSE
+/usr/local/bin/python -m pip install delocate --user --upgrade
 
 # Always prefer brew version.
 for _py in 3 2; do
@@ -31,7 +32,6 @@ for _py in 3 2; do
     $PYTHON -m pip install setuptools --upgrade --user
     $PYTHON -m pip install wheel --upgrade --user
     $PYTHON -m pip install numpy --upgrade --user
-    $PYTHON -m pip install delocate --upgrade  --user
     $PYTHON -m pip install twine  --upgrade  --user
 
     PLATFORM=$($PYTHON -c "import distutils.util; print(distutils.util.get_platform())")
@@ -53,7 +53,7 @@ for _py in 3 2; do
             sed "s/from distutils.*setup/from setuptools import setup/g" setup.cmake.py > setup.wheel.py
             $PYTHON setup.wheel.py bdist_wheel -p $PLATFORM 
             # Now fix the wheel using delocate.
-            delocate-wheel -w $WHEELHOUSE -v dist/*.whl
+            ~/.local/bin/delocate-wheel -w $WHEELHOUSE -v dist/*.whl
         )
 
         ls $WHEELHOUSE/pymoose*-py${_py}-*.whl

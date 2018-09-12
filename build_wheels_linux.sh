@@ -43,7 +43,7 @@ for PYV in 36 27; do
         cd $PYVER
         echo "Building using $PYDIR in $PYVER"
         PYTHON=$(ls $PYDIR/bin/python?.?)
-        $PYTHON -m pip install numpy matplotlib
+        $PYTHON -m pip install numpy matplotlib twine
         $PYTHON -m pip uninstall pymoose -y
 	git pull || echo "Failed to pull $BRANCH"
         $CMAKE -DPYTHON_EXECUTABLE=$PYTHON  \
@@ -77,5 +77,5 @@ done
 
 ls -lh $WHEELHOUSE/*.whl
 if [ ! -z PYPI_PASSWORD ]; then
-    twine upload $WHEELHOUSE/pymoose*.whl --user bhallalab  --password $PYPI_PASSWORD
+    /opt/python/cp27-cp27m/bin/python -m twine upload $WHEELHOUSE/pymoose*.whl --user bhallalab  --password $PYPI_PASSWORD
 fi
