@@ -1,0 +1,10 @@
+FROM centos
+
+RUN yum update
+RUN yum install wget
+RUN cd /etc/yum.repos.d/ 
+RUN wget https://download.opensuse.org/repositories/home:moose/CentOS_7/home:moose.repo
+RUN yum install moose-nightly
+
+# Now test.
+RUN python -c 'import moose; moose.test()'
