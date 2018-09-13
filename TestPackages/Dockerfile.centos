@@ -8,6 +8,7 @@ RUN yum install python36 python36-pip python36-numpy -y
 RUN cd /etc/yum.repos.d/ && wget https://download.opensuse.org/repositories/home:moose/CentOS_7/home:moose.repo
 RUN yum update -y
 RUN yum install moose-nightly -y
+RUN yum update -y
 
 # Test the package..
 RUN python -c 'import moose; moose.test()'
