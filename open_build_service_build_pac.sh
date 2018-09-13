@@ -4,7 +4,6 @@ set -e
 
 REPOS="xUbuntu_18.04 xUbuntu_16.04 xUbuntu_14.04 \
     openSUSE_Tumbleweed openSUSE_Leap_15.0\
-    ScientificLinux_7 \
     SLE_15 \
     RHEL_7 \
     Fedora_Rawhide Fedora_28 \
