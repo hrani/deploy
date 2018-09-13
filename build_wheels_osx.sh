@@ -1,12 +1,13 @@
 #!/bin/bash
 set -e 
+set -x
 
 BRANCH=$(cat ./BRANCH)
 VERSION=3.2.0.dev$(date +%Y%m%d)
 
-echo "[INFO] Create virtualenv by yourself"
-
-brew install gsl 
+brew install gsl  || echo "Failed to install gsl"
+brew upgrade python3 || echo "Failed to upgrade python3"
+brew upgrade python2 || echo "Failed to upgrade python2"
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -18,7 +19,8 @@ fi
 cd moose-core && git pull
 WHEELHOUSE=$HOME/wheelhouse
 mkdir -p $WHEELHOUSE
-/usr/local/bin/python -m pip install delocate --user --upgrade
+sudo /usr/local/bin/python3 -m pip install delocate virtualenv
+DELOCATE_WHEEL=/usr/local/bin/delocate-wheel
 
 # Always prefer brew version.
 for _py in 3 2; do
@@ -38,22 +40,20 @@ for _py in 3 2; do
 
     ( 
         cd $MOOSE_SOURCE_DIR
-        mkdir -p _build && cd _build
-        echo "Building wheel for $PLATFORM"
-        cmake -DVERSION_MOOSE=$VERSION \
-            -DCMAKE_RELEASE_TYPE=Release \
-            -DWITH_HDF=OFF \
-            -DPYTHON_EXECUTABLE=$PYTHON \
-            ..
+	BUILDDIR=_build_$_py
+        mkdir -p $BUILDDIR && cd $BUILDDIR
+        echo " -- Building wheel for $PLATFORM"
+        cmake -DVERSION_MOOSE=$VERSION -DPYTHON_EXECUTABLE=$PYTHON ..
 
         make -j4
         ( 
             cd python 
             ls *.py
-            sed "s/from distutils.*setup/from setuptools import setup/g" setup.cmake.py > setup.wheel.py
+            sed "s/from distutils.*setup/from setuptools import setup/g" \
+                setup.cmake.py > setup.wheel.py
             $PYTHON setup.wheel.py bdist_wheel -p $PLATFORM 
             # Now fix the wheel using delocate.
-            ~/.local/bin/delocate-wheel -w $WHEELHOUSE -v dist/*.whl
+            $DELOCATE_WHEEL -w $WHEELHOUSE -v dist/*.whl
         )
 
         ls $WHEELHOUSE/pymoose*-py${_py}-*.whl
@@ -61,20 +61,22 @@ for _py in 3 2; do
         # create a virtualenv and test this.
         rm -rf $HOME/Py${_py}
         (
-            virtualenv -p $PYTHON $HOME/Py${_py}
+            python3 -m virtualenv -p $PYTHON $HOME/Py${_py}
             source $HOME/Py${_py}/bin/activate
             set +x 
             python -m pip install $WHEELHOUSE/pymoose*-py${_py}-*.whl
-            set -x
+            echo "Testing wheel in virtualenv"
             which python
             python --version
             python -c 'import moose; print( moose.__version__ )'
             deactivate
+            set -x
         )
     )
 
-    if [ -n "$PYPI_PASSWORD" ]; then
-        echo "Did you test the wheels?"
-        $PYTHON -m twine upload -u bhallalab -p $PYPI_PASSWORD $HOME/wheelhouse/pymoose*.whl
+    if [ ! -z "$PYPI_PASSWORD" ]; then
+        echo "Did you test the wheels? I am uploading anyway ..."
+        $PYTHON -m twine upload -u bhallalab -p $PYPI_PASSWORD \
+            $HOME/wheelhouse/pymoose*.whl
     fi
 done
