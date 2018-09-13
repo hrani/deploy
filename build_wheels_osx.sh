@@ -6,7 +6,8 @@ BRANCH=$(cat ./BRANCH)
 VERSION=3.2.0.dev$(date +%Y%m%d)
 
 brew install gsl 
-brew install python python2
+brew upgrade python3
+brew upgrade python2
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
