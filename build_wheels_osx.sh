@@ -63,7 +63,7 @@ for _py in 3 2; do
         # create a virtualenv and test this.
         rm -rf $HOME/Py${_py}
         (
-            virtualenv -p $PYTHON $HOME/Py${_py}
+            python3 -m virtualenv -p $PYTHON $HOME/Py${_py}
             source $HOME/Py${_py}/bin/activate
             set +x 
             python -m pip install $WHEELHOUSE/pymoose*-py${_py}-*.whl
