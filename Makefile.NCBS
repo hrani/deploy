@@ -7,6 +7,7 @@ DOCKERFILE:="bhallalab/pymoose_wheels_$(USER):$(VERSION)"
 wheels : ./Dockerfile ./build_wheels_linux.sh 
 	mkdir -p $(HOME)/wheelhouse
 	docker build  \
+	    --no-cache \
 	    --build-arg HTTPS_PROXY="http://proxy.ncbs.res.in:3128/" \
 	    --build-arg HTTP_PROXY="http://proxy.ncbs.res.in:3128/" \
 	    --build-arg PYPI_PASSWORD=$(PYPI_PASSWORD) \
