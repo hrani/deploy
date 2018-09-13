@@ -39,13 +39,10 @@ for _py in 3 2; do
 
     ( 
         cd $MOOSE_SOURCE_DIR
-        mkdir -p _build && cd _build
-        echo "Building wheel for $PLATFORM"
-        cmake -DVERSION_MOOSE=$VERSION \
-            -DCMAKE_RELEASE_TYPE=Release \
-            -DWITH_HDF=OFF \
-            -DPYTHON_EXECUTABLE=$PYTHON \
-            ..
+	BUILDDIR=_build_$_py
+        mkdir -p $BUILDDIR && cd $BUILDDIR
+        echo " -- Building wheel for $PLATFORM"
+        cmake -DVERSION_MOOSE=$VERSION -DPYTHON_EXECUTABLE=$PYTHON ..
 
         make -j4
         ( 
@@ -67,12 +64,12 @@ for _py in 3 2; do
             source $HOME/Py${_py}/bin/activate
             set +x 
             python -m pip install $WHEELHOUSE/pymoose*-py${_py}-*.whl
-            set -x
             echo "Testing wheel in virtualenv"
             which python
             python --version
             python -c 'import moose; print( moose.__version__ )'
             deactivate
+            set -x
         )
     )
 
