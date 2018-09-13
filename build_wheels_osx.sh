@@ -77,6 +77,6 @@ for _py in 3 2; do
     if [ ! -z "$PYPI_PASSWORD" ]; then
         echo "Did you test the wheels? I am uploading anyway ..."
         $PYTHON -m twine upload -u bhallalab -p $PYPI_PASSWORD \
-            $HOME/wheelhouse/pymoose*.whl
+            $HOME/wheelhouse/pymoose*.whl || echo "Failed to upload to PyPi"
     fi
 done
