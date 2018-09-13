@@ -1,10 +1,15 @@
 FROM centos
 
 RUN yum update
-RUN yum install wget
+RUN yum install wget git
+RUN yum install python3 python3-pip python3-numpy
 RUN cd /etc/yum.repos.d/ 
 RUN wget https://download.opensuse.org/repositories/home:moose/CentOS_7/home:moose.repo
 RUN yum install moose-nightly
 
-# Now test.
+# Test the package..
 RUN python -c 'import moose; moose.test()'
+
+# Now test with wheel
+RUN python3 -m pip install pymoose --pre --upgrade
+RUN python3 -c 'import moose; moose.test()'
