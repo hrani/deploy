@@ -1,0 +1,18 @@
+FROM debian:9.0
+
+ENV http_proxy=http://proxy.ncbs.res.in:3128/
+ENV https_proxy=http://proxy.ncbs.res.in:3128/
+
+RUN echo 'deb http://download.opensuse.org/repositories/home:/moose/Debian_9.0/ /' > /etc/apt/sources.list.d/home:moose.list
+RUN wget -nv https://download.opensuse.org/repositories/home:moose/Debian_9.0/Release.key -O Release.key
+RUN apt-key add - < Release.key
+RUN apt-get update
+RUN apt-get install moose-nightly -y
+RUN apt-get install python3 python3-numpy python3-pip
+
+# Test the package..
+RUN python -c 'import moose; moose.test()'
+
+# Now test with wheel
+RUN python36 -m pip install pymoose --pre --upgrade
+RUN python36 -c 'import moose; moose.test()'

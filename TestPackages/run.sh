@@ -1,10 +1,6 @@
 #!/usr/bin/env bash
 
-for _os in centos; do
+for _os in debian centon; do
     DOCKERFILE=./Dockerfile.${_os}
-    docker build \
-        --tag moose-package:${_os} \
-        --build-arg http_proxy="http://proxy.ncbs.res.in:3128/" \
-        --build-arg https_proxy="http://proxy.ncbs.res.in:3128/" \
-        -f $DOCKERFILE .
+    docker build --tag moose-package:${_os} -f $DOCKERFILE .
 done
