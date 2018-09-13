@@ -3,6 +3,7 @@ FROM debian:9.0
 ENV http_proxy=http://proxy.ncbs.res.in:3128/
 ENV https_proxy=http://proxy.ncbs.res.in:3128/
 
+RUN apt update && apt install wget git -y 
 RUN echo 'deb http://download.opensuse.org/repositories/home:/moose/Debian_9.0/ /' > /etc/apt/sources.list.d/home:moose.list
 RUN wget -nv https://download.opensuse.org/repositories/home:moose/Debian_9.0/Release.key -O Release.key
 RUN apt-key add - < Release.key
