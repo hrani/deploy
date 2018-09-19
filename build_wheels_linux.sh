@@ -67,8 +67,11 @@ for PYV in 36 27; do
     )
 done
 
+# List all wheels.
+ls -lh $WHEELHOUSE/*.whl
+
 # now check the wheels.
-for whl in $WHEELHOUSE/*.whl; do
+for whl in $WHEELHOUSE/pymoose*.whl; do
     auditwheel show "$whl"
 done
 
@@ -78,9 +81,5 @@ echo "Installing before testing ... "
 for PYV in 36 27; do
     PYDIR=/opt/python/cp${PYV}-cp${PYV}m
     PYTHON=$(ls $PYDIR/bin/python?.?)
-    echo " -- Installing for $PYTHON ... "
     $PYTHON -c 'import moose; print( moose.__version__ )'
 done
-	
-
-ls -lh $WHEELHOUSE/*.whl
