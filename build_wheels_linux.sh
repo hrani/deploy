@@ -43,6 +43,7 @@ fi
 GSL_STATIC_LIBS="/usr/local/lib/libgsl.a;/usr/local/lib/libgslcblas.a"
 CMAKE=/usr/bin/cmake28
 
+# Build wheels here.
 for PYV in 36 27; do
     PYDIR=/opt/python/cp${PYV}-cp${PYV}m
     PYVER=$(basename $PYDIR)
@@ -51,8 +52,8 @@ for PYV in 36 27; do
         cd $PYVER
         echo "Building using $PYDIR in $PYVER"
         PYTHON=$(ls $PYDIR/bin/python?.?)
-        $PYTHON -m pip install numpy matplotlib twine
-        $PYTHON -m pip uninstall pymoose -y
+        $PYTHON -m pip install numpy twine
+        $PYTHON -m pip uninstall pymoose -y || echo "No pymoose"
 	git pull || echo "Failed to pull $BRANCH"
         $CMAKE -DPYTHON_EXECUTABLE=$PYTHON  \
             -DGSL_STATIC_LIBRARIES=$GSL_STATIC_LIBS \
@@ -63,7 +64,9 @@ for PYV in 36 27; do
         # Now build bdist_wheel
         cd python
         cp setup.cmake.py setup.py
-        $PYDIR/bin/pip wheel . -w $WHEELHOUSE 
+        $PYTHON -m pip wheel . -w $WHEELHOUSE 
+        echo "Content of WHEELHOUSE"
+        ls -lh $WHEELHOUSE/*.whl
     )
 done
 
