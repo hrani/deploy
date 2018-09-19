@@ -17,7 +17,12 @@ fi
 
 function buildRepo {
     echo "  Building for $1" 
-    osc build "$1" --noverify --trust-all-projects
+    ROOTDIR=$HOME/.OBS/build
+    mkdir -p $ROOTDIR
+    echo "Building in $ROOTDIR"
+    osc build --noverify --trust-all-projects  \
+        --root=$ROOTDIR \
+        "$1"
 }
 
 (
