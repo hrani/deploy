@@ -53,6 +53,7 @@ for PYV in 36 27; do
         echo "Building using $PYDIR in $PYVER"
         PYTHON=$(ls $PYDIR/bin/python?.?)
         $PYTHON -m pip install numpy twine
+        $PYTHON -m pip install matplotlib==2.2.3
         $PYTHON -m pip uninstall pymoose -y || echo "No pymoose"
 	git pull || echo "Failed to pull $BRANCH"
         $CMAKE -DPYTHON_EXECUTABLE=$PYTHON  \
