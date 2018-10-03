@@ -19,7 +19,9 @@ fi
 cd moose-core && git pull
 WHEELHOUSE=$HOME/wheelhouse
 mkdir -p $WHEELHOUSE
-sudo /usr/local/bin/python3 -m pip install delocate virtualenv
+# Current version 0.7.4 seems to be broken with python3.7 .
+# See https://travis-ci.org/BhallaLab/deploy/jobs/435219821
+sudo /usr/local/bin/python -m pip install delocate==0.7.3 virtualenv
 DELOCATE_WHEEL=/usr/local/bin/delocate-wheel
 
 # Always prefer brew version.
@@ -32,7 +34,7 @@ for _py in 3 2; do
     fi
 
     $PYTHON -m pip install setuptools --upgrade --user
-    $PYTHON -m pip install wheel --upgrade --user
+    $PYTHON -m pip install wheel==0.31.0 --upgrade --user
     $PYTHON -m pip install numpy --upgrade --user
     $PYTHON -m pip install twine  --upgrade  --user
 
