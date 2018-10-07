@@ -5,7 +5,7 @@ matrix:
         - os : osx
           osx_image: xcode10
         - os: osx
-          osx_image: xcode9
+          osx_image: xcode9.4
         - os: linux
           sudo: required
 
