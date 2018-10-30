@@ -1,0 +1,26 @@
+FROM ubuntu:18.04
+MAINTAINER Dilawar Singh <dilawar.s.rajput@gmail.com>
+
+RUN apt update
+RUN apt install -y wget gnupg2 sudo
+RUN wget -nv https://download.opensuse.org/repositories/home:moose/xUbuntu_18.04/Release.key -O Release.key
+RUN apt-key add - < Release.key
+RUN sh -c "echo 'deb http://download.opensuse.org/repositories/home:/moose/xUbuntu_18.04/ /' > /etc/apt/sources.list.d/home:moose.list"
+RUN apt-get update 
+RUN apt install -y python-matplotlib python-scipy python-qt4  python-networkx
+RUN apt install -y moose graphviz xterm
+
+# Replace 1000 with your user / group id
+RUN export uid=1000 gid=1000 && \
+    mkdir -p /home/mooser && \
+    echo "mooser:x:${uid}:${gid}:Mooser,,,:/home/mooser:/bin/bash" >> /etc/passwd && \
+    echo "mooser:x:${uid}:" >> /etc/group && \
+    echo "mooser ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/mooser && \
+    chmod 0440 /etc/sudoers.d/mooser && \
+    chown ${uid}:${gid} -R /home/mooser
+
+USER mooser
+ENV HOME /home/mooser
+# see https://github.com/osrf/docker_images/issues/21
+ENV QT_X11_NO_MITSHM=1 
+CMD /usr/bin/xterm -e echo "Run `moosegui` command to launch moose"
