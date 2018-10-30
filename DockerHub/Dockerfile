@@ -1,14 +1,14 @@
-FROM ubuntu:18.04
+FROM ubuntu:16.04
 MAINTAINER Dilawar Singh <dilawar.s.rajput@gmail.com>
 
 RUN apt update
 RUN apt install -y wget gnupg2 sudo
-RUN wget -nv https://download.opensuse.org/repositories/home:moose/xUbuntu_18.04/Release.key -O Release.key
+RUN wget -nv https://download.opensuse.org/repositories/home:moose/xUbuntu_16.04/Release.key -O Release.key
 RUN apt-key add - < Release.key
-RUN sh -c "echo 'deb http://download.opensuse.org/repositories/home:/moose/xUbuntu_18.04/ /' > /etc/apt/sources.list.d/home:moose.list"
+RUN sh -c "echo 'deb http://download.opensuse.org/repositories/home:/moose/xUbuntu_16.04/ /' > /etc/apt/sources.list.d/home:moose.list"
 RUN apt-get update 
 RUN apt install -y python-matplotlib python-scipy python-qt4  python-networkx
-RUN apt install -y moose graphviz xterm
+RUN apt install -y moose moogli python-opengl python-qt4-gl graphviz xterm
 
 # Replace 1000 with your user / group id
 RUN export uid=1000 gid=1000 && \
