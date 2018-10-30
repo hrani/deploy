@@ -23,4 +23,4 @@ USER mooser
 ENV HOME /home/mooser
 # see https://github.com/osrf/docker_images/issues/21
 ENV QT_X11_NO_MITSHM=1 
-CMD /usr/bin/xterm -e echo "Run `moosegui` command to launch moose"
+CMD /usr/bin/xterm 
