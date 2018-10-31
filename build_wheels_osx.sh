@@ -11,6 +11,8 @@ export PATH=/usr/local/bin:$PATH
 brew install gsl  || echo "Failed to install gsl"
 brew upgrade python3 || echo "Failed to upgrade python3"
 brew upgrade python2 || echo "Failed to upgrade python2"
+brew upgrade python || echo "Failed to upgrade python"
+brew uninstall numpy || echo "Failed to uninstall numpy"
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
