@@ -8,7 +8,8 @@ VERSION=3.2.0.dev$(date +%Y%m%d)
 # Just to be sure on homebrew.
 export PATH=/usr/local/bin:$PATH
 
-brew install gsl  || echo "Failed to install gsl"
+brew update || echo "Failed to update brew"
+brew install gsl  || brew upgrade gsl 
 brew upgrade python3 || echo "Failed to upgrade python3"
 brew upgrade python2 || echo "Failed to upgrade python2"
 brew upgrade python || echo "Failed to upgrade python"
