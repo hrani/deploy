@@ -20,7 +20,7 @@ function buildRepo {
     ROOTDIR=$HOME/.OBS/build
     mkdir -p $ROOTDIR
     echo "Building in $ROOTDIR"
-    osc build --noverify --trust-all-projects  "$1"
+    osc build --noverify --trust-all-projects --clean  "$1"
 }
 
 (
