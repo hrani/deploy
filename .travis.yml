@@ -12,6 +12,16 @@ matrix:
 services:
     - docker
 
+
+notifications:
+  email:
+    recipients:
+    - bhalla@ncbs.res.in
+    - dilawar.s.rajput@gmail.com
+    - hrani@ncbs.res.in
+    on_success: change
+    on_failure: always
+
 script:
     - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./build_wheels_osx.sh      ; fi
     - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then make   ; fi
