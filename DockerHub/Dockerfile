@@ -1,27 +1,10 @@
-FROM ubuntu:16.04
+# Use the python3.7 image.
+FROM python:3.7.6-slim-buster
 MAINTAINER Dilawar Singh <dilawar.s.rajput@gmail.com>
 
 RUN apt update
-RUN apt install -y wget gnupg2 sudo
-RUN wget -nv https://download.opensuse.org/repositories/home:moose/xUbuntu_16.04/Release.key -O Release.key
-RUN apt-key add - < Release.key
-RUN sh -c "echo 'deb http://download.opensuse.org/repositories/home:/moose/xUbuntu_16.04/ /' > /etc/apt/sources.list.d/home:moose.list"
-RUN apt-get update 
-RUN apt install -y python-matplotlib python-scipy python-qt4  python-networkx
-RUN apt install -y moose moogli python-opengl python-qt4-gl graphviz xterm
-
-# Replace 1000 with your user / group id
-RUN export uid=1000 gid=1000 && \
-    mkdir -p /home/mooser && \
-    echo "mooser:x:${uid}:${gid}:Mooser,,,:/home/mooser:/bin/bash" >> /etc/passwd && \
-    echo "mooser:x:${uid}:" >> /etc/group && \
-    echo "mooser ALL=(ALL) NOPASSWD: ALL" > /etc/sudoers.d/mooser && \
-    chmod 0440 /etc/sudoers.d/mooser && \
-    chown ${uid}:${gid} -R /home/mooser
-
-USER mooser
-ENV HOME /home/mooser
-# see https://github.com/osrf/docker_images/issues/21
-ENV QT_X11_NO_MITSHM=1 
-CMD cd 
-CMD /usr/bin/xterm 
+RUN apt install -y python3-scipy python3-networkx graphviz \
+  && rm -rf /var/lib/apt/lists/*
+RUN python3 -m pip --no-cache-dir install pymoose --pre
+RUN python3 -m pip --no-cache-dir install matplotlib numpy 
+CMD [ "bash" ]
