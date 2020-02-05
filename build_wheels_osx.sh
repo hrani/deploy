@@ -3,7 +3,7 @@ set -e
 set -x
 
 BRANCH=$(cat ./BRANCH)
-VERSION=3.2.0.dev$(date +%Y%m%d)
+VERSION=3.2.dev$(date +%Y%m%d)
 
 # Just to be sure on homebrew.
 export PATH=/usr/local/bin:$PATH
