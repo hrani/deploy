@@ -30,10 +30,10 @@ if [ ! -f /usr/local/lib/libgsl.a ]; then
 fi 
 
 MOOSE_SOURCE_DIR=$SCRIPT_DIR/moose-core
-if [ ! -d $MOOSE_SOURCE_DIR ]; then
-  git clone https://github.com/dilawar/moose-core $MOOSE_SOURCE_DIR --depth 10 --branch $BRANCH
-else
+if [ -d $MOOSE_SOURCE_DIR ]; then
   cd $MOOSE_SOURCE_DIR && git checkout $BRANCH && git pull origin $BRANCH
+else
+  git clone https://github.com/dilawar/moose-core $MOOSE_SOURCE_DIR --depth 10 --branch $BRANCH
 fi
 
 # Try to link statically.
@@ -41,40 +41,33 @@ GSL_STATIC_LIBS="/usr/local/lib/libgsl.a;/usr/local/lib/libgslcblas.a"
 CMAKE=/usr/bin/cmake3
 
 # Build wheels here.
-for PYV in 37 27; do
-    PYDIR=/opt/python/cp${PYV}-cp${PYV}m
-    #PYVER=$(basename $PYDIR)
-    (
-        echo "Building using $PYDIR in $PYVER"
-        PYTHON=$(ls $PYDIR/bin/python?.?)
-        if [ "$PYV" -eq 27 ]; then
-            $PYTHON -m pip install numpy==1.15
-            $PYTHON -m pip install matplotlib==2.2.3
-        else
-            $PYTHON -m pip install numpy twine
-            $PYTHON -m pip install matplotlib
-        fi
-        $PYTHON -m pip install twine
-        $PYTHON -m pip uninstall pymoose -y || echo "No pymoose"
-	git pull || echo "Failed to pull $BRANCH"
+PY27=$(ls /opt/python/cp27-cp27m/bin/python?.?)
+PY35=$(ls /opt/python/cp35-cp35m/bin/python?.?)
+PY36=$(ls /opt/python/cp36-cp36m/bin/python?.?)
+PY37=$(ls /opt/python/cp37-cp37m/bin/python?.?)
+PY38=$(ls /opt/python/cp38-cp38/bin/python?.?)
 
-        #$CMAKE -DPYTHON_EXECUTABLE=$PYTHON  \
-        #    -DGSL_STATIC_LIBRARIES=$GSL_STATIC_LIBS \
-        #    -DVERSION_MOOSE=$VERSION \
-        #    ${MOOSE_SOURCE_DIR}
-        #make $MAKEOPTS
-        
-        # Now build bdist_wheel
-        #cd python
+for PYTHON in $PY38 $PY37 $PY36 $PY35 $PY27; do
+  echo "========= Building using $PYTHON ..."
+  if [ "$PYV" -eq 27 ]; then
+    $PYTHON -m pip install numpy==1.15
+    $PYTHON -m pip install matplotlib==2.2.3
+  else
+    $PYTHON -m pip install numpy twine
+    $PYTHON -m pip install matplotlib
+  fi
+  $PYTHON -m pip install twine
+  $PYTHON -m pip uninstall pymoose -y || echo "No pymoose"
 
-        cd $MOOSE_SOURCE_DIR
-        export GSL_USE_STATIC_LIBRARIES=1
-        $PYTHON setup.py build_ext 
-        $PYTHON setup.py bdist_wheel --skip-build 
-        echo "Content of WHEELHOUSE"
-        ls -lh dist/*.whl
-    )
+  cd $MOOSE_SOURCE_DIR
+  export GSL_USE_STATIC_LIBRARIES=1
+  $PYTHON setup.py build_ext 
+  $PYTHON setup.py bdist_wheel --skip-build 
+  echo "Content of WHEELHOUSE"
+  ls -lh dist/*.whl
 done
+
+WHEELHOUSE=$MOOSE_SOURCE_DIR/dist
 
 # List all wheels.
 ls -lh $WHEELHOUSE/*.whl
@@ -82,13 +75,4 @@ ls -lh $WHEELHOUSE/*.whl
 # now check the wheels.
 for whl in $WHEELHOUSE/pymoose*.whl; do
     auditwheel show "$whl"
-done
-
-echo "Installing before testing ... "
-/opt/python/cp27-cp27m/bin/pip install $WHEELHOUSE/pymoose-$VERSION-py2-none-any.whl
-/opt/python/cp36-cp36m/bin/pip install $WHEELHOUSE/pymoose-$VERSION-py3-none-any.whl
-for PYV in 36 27; do
-    PYDIR=/opt/python/cp${PYV}-cp${PYV}m
-    PYTHON=$(ls $PYDIR/bin/python?.?)
-    $PYTHON -c 'import moose; print( moose.__version__ )'
 done
