@@ -15,7 +15,7 @@ mkdir -p $WHEELHOUSE
 
 # tag on github and revision number. Make sure that they are there.
 BRANCH=$(cat ./BRANCH)
-VERSION="3.2.dev$(date +%Y%m%d)"
+VERSION="3.2dev$(date +%Y%m%d)"
 
 echo "Building version $VERSION, from branch $BRANCH"
 
@@ -30,8 +30,11 @@ if [ ! -f /usr/local/lib/libgsl.a ]; then
 fi 
 
 MOOSE_SOURCE_DIR=$SCRIPT_DIR/moose-core
-rm -rf $MOOSE_SOURCE_DIR
-git clone https://github.com/dilawar/moose-core --depth 10 --branch $BRANCH
+if [ ! -d $MOOSE_SOURCE_DIR ]; then
+  git clone https://github.com/dilawar/moose-core $MOOSE_SOURCE_DIR --depth 10 --branch $BRANCH
+else
+  cd $MOOSE_SOURCE_DIR && git checkout $BRANCH && git pull origin $BRANCH
+fi
 
 # Try to link statically.
 GSL_STATIC_LIBS="/usr/local/lib/libgsl.a;/usr/local/lib/libgslcblas.a"
@@ -67,9 +70,9 @@ for PYV in 37 27; do
         cd $MOOSE_SOURCE_DIR
         export GSL_USE_STATIC_LIBRARIES=1
         $PYTHON setup.py build_ext 
-        $PYTHON -m pip wheel . -w $WHEELHOUSE 
+        $PYTHON setup.py bdist_wheel --skip-build 
         echo "Content of WHEELHOUSE"
-        ls -lh $WHEELHOUSE/*.whl
+        ls -lh dist/*.whl
     )
 done
 
