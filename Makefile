@@ -6,6 +6,6 @@ DOCKERFILE:="bhallalab/pymoose_wheels_$(USER):$(VERSION)"
 
 wheels : ./Dockerfile ./build_wheels_linux.sh 
 	mkdir -p $(HOME)/wheelhouse
-	docker build  --no-cache \
+	docker build \
 	    -t $(DOCKERFILE) \
 	    --build-arg PYPI_PASSWORD=$(PYPI_PASSWORD) . 

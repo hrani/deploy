@@ -30,10 +30,8 @@ if [ ! -f /usr/local/lib/libgsl.a ]; then
 fi 
 
 MOOSE_SOURCE_DIR=$SCRIPT_DIR/moose-core
-
-if [ ! -d $MOOSE_SOURCE_DIR ]; then
-    git clone https://github.com/dilawar/moose-core --depth 10 --branch $BRANCH
-fi
+rm -rf $MOOSE_SOURCE_DIR
+git clone https://github.com/dilawar/moose-core --depth 10 --branch $BRANCH
 
 # Try to link statically.
 GSL_STATIC_LIBS="/usr/local/lib/libgsl.a;/usr/local/lib/libgslcblas.a"
@@ -66,7 +64,9 @@ for PYV in 37 27; do
         # Now build bdist_wheel
         #cd python
 
+        cd $MOOSE_SOURCE_DIR
         export GSL_USE_STATIC_LIBRARIES=1
+        $PYTHON setup.py build_ext 
         $PYTHON -m pip wheel . -w $WHEELHOUSE 
         echo "Content of WHEELHOUSE"
         ls -lh $WHEELHOUSE/*.whl
