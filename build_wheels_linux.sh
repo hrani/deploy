@@ -5,11 +5,7 @@ set -x
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 NPROC=$(cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l)
-NUM_WORKERS=$((NPROC/2))
-
-if [ "$TRAVIS" == "true" ]; then
-    NUM_WORKERS=2
-fi
+NUM_WORKERS=$((NPROC))
 MAKEOPTS="-j$NUM_WORKERS"
 
 # Place to store wheels.
@@ -19,9 +15,9 @@ mkdir -p $WHEELHOUSE
 
 # tag on github and revision number. Make sure that they are there.
 BRANCH=$(cat ./BRANCH)
-VERSION="3.2.0.dev$(date +%Y%m%d)"
+VERSION="3.2.dev$(date +%Y%m%d)"
 
-echo "Building version $REVISION, from branch $BRANCH"
+echo "Building version $VERSION, from branch $BRANCH"
 
 if [ ! -f /usr/local/lib/libgsl.a ]; then 
     #wget --no-check-certificate ftp://ftp.gnu.org/gnu/gsl/gsl-2.4.tar.gz 
@@ -36,7 +32,7 @@ fi
 MOOSE_SOURCE_DIR=$SCRIPT_DIR/moose-core
 
 if [ ! -d $MOOSE_SOURCE_DIR ]; then
-    git clone https://github.com/BhallaLab/moose-core --depth 10 --branch $BRANCH
+    git clone https://github.com/dilawar/moose-core --depth 10 --branch $BRANCH
 fi
 
 # Try to link statically.
@@ -44,12 +40,10 @@ GSL_STATIC_LIBS="/usr/local/lib/libgsl.a;/usr/local/lib/libgslcblas.a"
 CMAKE=/usr/bin/cmake3
 
 # Build wheels here.
-for PYV in 36 27; do
+for PYV in 37 27; do
     PYDIR=/opt/python/cp${PYV}-cp${PYV}m
-    PYVER=$(basename $PYDIR)
-    mkdir -p $PYVER
+    #PYVER=$(basename $PYDIR)
     (
-        cd $PYVER
         echo "Building using $PYDIR in $PYVER"
         PYTHON=$(ls $PYDIR/bin/python?.?)
         if [ "$PYV" -eq 27 ]; then
@@ -62,15 +56,17 @@ for PYV in 36 27; do
         $PYTHON -m pip install twine
         $PYTHON -m pip uninstall pymoose -y || echo "No pymoose"
 	git pull || echo "Failed to pull $BRANCH"
-        $CMAKE -DPYTHON_EXECUTABLE=$PYTHON  \
-            -DGSL_STATIC_LIBRARIES=$GSL_STATIC_LIBS \
-            -DVERSION_MOOSE=$VERSION \
-            ${MOOSE_SOURCE_DIR}
-        make  $MAKEOPTS
+
+        #$CMAKE -DPYTHON_EXECUTABLE=$PYTHON  \
+        #    -DGSL_STATIC_LIBRARIES=$GSL_STATIC_LIBS \
+        #    -DVERSION_MOOSE=$VERSION \
+        #    ${MOOSE_SOURCE_DIR}
+        #make $MAKEOPTS
         
         # Now build bdist_wheel
-        cd python
-        cp setup.cmake.py setup.py
+        #cd python
+
+        export GSL_USE_STATIC_LIBRARIES=1
         $PYTHON -m pip wheel . -w $WHEELHOUSE 
         echo "Content of WHEELHOUSE"
         ls -lh $WHEELHOUSE/*.whl
