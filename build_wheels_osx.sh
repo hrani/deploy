@@ -36,12 +36,13 @@ DELOCATE_WHEEL=/usr/local/bin/delocate-wheel
 
 # Always prefer brew version.
 for _py in 3 2; do
-    PYTHON=python$_py
+    PYTHON=/usr/local/bin/python$_py
 
     if [ ! -f $PYTHON ]; then
         echo "Not found $PYTHON"
         continue
     fi
+
 
     $PYTHON -m pip install setuptools --upgrade --user
     $PYTHON -m pip install wheel --upgrade --user

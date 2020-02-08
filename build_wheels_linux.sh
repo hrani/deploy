@@ -9,6 +9,7 @@ NUM_WORKERS=$((NPROC))
 MAKEOPTS="-j$NUM_WORKERS"
 
 # Place to store wheels.
+
 WHEELHOUSE=${1-$HOME/wheelhouse}
 echo "Path to store wheels : $WHEELHOUSE"
 mkdir -p $WHEELHOUSE
@@ -16,6 +17,17 @@ mkdir -p $WHEELHOUSE
 # tag on github and revision number. Make sure that they are there.
 BRANCH=$(cat ./BRANCH)
 VERSION="3.2dev$(date +%Y%m%d)"
+
+
+# Create a test script and upload.
+cat <<EOF >/tmp/test.py
+import moose
+import moose.utils as mu
+print( moose.__version__ )
+moose.reinit()
+moose.start( 1 )
+EOF
+
 
 echo "Building version $VERSION, from branch $BRANCH"
 
@@ -56,18 +68,23 @@ for PYTHON in $PY38 $PY37 $PY36 $PY35 $PY27; do
     $PYTHON -m pip install numpy twine
     $PYTHON -m pip install matplotlib
   fi
+
   $PYTHON -m pip install twine
+
+  # Removing existing pymoose if any.
   $PYTHON -m pip uninstall pymoose -y || echo "No pymoose"
 
   cd $MOOSE_SOURCE_DIR
   export GSL_USE_STATIC_LIBRARIES=1
   $PYTHON setup.py build_ext 
   $PYTHON setup.py bdist_wheel --skip-build 
-  echo "Content of WHEELHOUSE"
-  ls -lh dist/*.whl
-done
 
-WHEELHOUSE=$MOOSE_SOURCE_DIR/dist
+  echo "Install and test this wheel"
+  $PYTHON -m pip install dist/*.whl --user
+  $PYTHON /tmp/test.py 
+  mv dist/*.whl $WHEELHOUSE
+  rm -rf dist/*.whl
+done
 
 # List all wheels.
 ls -lh $WHEELHOUSE/*.whl
@@ -76,3 +93,16 @@ ls -lh $WHEELHOUSE/*.whl
 for whl in $WHEELHOUSE/pymoose*.whl; do
     auditwheel show "$whl"
 done
+
+PYPI_PASSWORD="$1"
+# upload to PYPI.
+for whl in `find $WHEELHOUSE -name "pymoose*.whl"`; do
+    # If successful, upload using twine.
+    if [ -n "$PYPI_PASSWORD" ]; then
+        $TWINE upload $whl --user bhallalab --password $PYPI_PASSWORD --skip-existing
+    else
+        echo "PYPI password is not set"
+    fi
+done
+
+# Now upload the source distribution.
