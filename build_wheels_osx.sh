@@ -28,15 +28,15 @@ fi
 cd moose-core && git pull
 WHEELHOUSE=$HOME/wheelhouse
 mkdir -p $WHEELHOUSE
+
 # Current version 0.7.4 seems to be broken with python3.7 .
 # See https://travis-ci.org/BhallaLab/deploy/jobs/435219820
-/usr/local/bin/python -m pip install delocate virtualenv --user
-/usr/local/bin/python3 -m pip install delocate virtualenv --user
+python3 -m pip install delocate --user
 DELOCATE_WHEEL=/usr/local/bin/delocate-wheel
 
 # Always prefer brew version.
 for _py in 3 2; do
-    PYTHON=/usr/local/bin/python$_py
+    PYTHON=python$_py
 
     if [ ! -f $PYTHON ]; then
         echo "Not found $PYTHON"
