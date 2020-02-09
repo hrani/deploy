@@ -30,7 +30,7 @@ rm -rf $WHEELHOUSE && mkdir -p $WHEELHOUSE
 
 # Current version 0.7.4 seems to be broken with python3.7 .
 # See https://travis-ci.org/BhallaLab/deploy/jobs/435219820
-/usr/local/bin/python3 -m pip install delocate --user
+/usr/local/bin/python3 -m pip install delocate 
 DELOCATE_WHEEL=/usr/local/bin/delocate-wheel
 
 # Always prefer brew version.
@@ -54,7 +54,7 @@ for _py in 3 2; do
         $PYTHON setup.py build_ext 
         export GSL_USE_STATIC_LIBRARIES=1
         $PYTHON setup.py bdist_wheel --skip-build 
-        delocate-wheel -v dist/*.whl -w $WHEELHOUSE
+        $DELOCATE_WHEEL -v dist/*.whl -w $WHEELHOUSE
         rm -rf dist/*.whl
     )
 
