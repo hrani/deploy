@@ -20,7 +20,8 @@ VERSION="3.2dev$(date +%Y%m%d)"
 
 
 # Create a test script and upload.
-cat <<EOF >/tmp/test.py
+TESTFILE=/tmp/test.py
+cat <<EOF >$TESTFILE
 import moose
 import moose.utils as mu
 print( moose.__version__ )
@@ -44,6 +45,7 @@ fi
 MOOSE_SOURCE_DIR=$SCRIPT_DIR/moose-core
 if [ -d $MOOSE_SOURCE_DIR ]; then
   cd $MOOSE_SOURCE_DIR && git checkout $BRANCH && git pull origin $BRANCH
+  rm -rf dist
 else
   git clone https://github.com/dilawar/moose-core $MOOSE_SOURCE_DIR --depth 10 --branch $BRANCH
 fi
@@ -61,7 +63,8 @@ PY38=$(ls /opt/python/cp38-cp38/bin/python?.?)
 
 for PYTHON in $PY38 $PY37 $PY36 $PY35 $PY27; do
   echo "========= Building using $PYTHON ..."
-  if [ "$PYV" -eq 27 ]; then
+  $PYTHON -m pip install pip setuptools --upgrade
+  if [[ "$PYV" -eq "27" ]]; then
     $PYTHON -m pip install numpy==1.15
     $PYTHON -m pip install matplotlib==2.2.3
   else
@@ -78,12 +81,16 @@ for PYTHON in $PY38 $PY37 $PY36 $PY35 $PY27; do
   export GSL_USE_STATIC_LIBRARIES=1
   $PYTHON setup.py build_ext 
   $PYTHON setup.py bdist_wheel --skip-build 
-
-  echo "Install and test this wheel"
-  $PYTHON -m pip install dist/*.whl --user
-  $PYTHON /tmp/test.py 
-  mv dist/*.whl $WHEELHOUSE
-  rm -rf dist/*.whl
+  ( 
+      echo "Install and test this wheel"
+      # NOTE: Not sure why I have to do this. But cant install wheel from build
+      # directory.
+      cd /tmp
+      $PYTHON -m pip install $MOOSE_SOURCE_DIR/dist/*.whl 
+      $PYTHON $TESTFILE
+      mv $MOOSE_SOURCE_DIR/dist/*.whl $WHEELHOUSE
+      rm -rf $MOOSE_SOURCE_DIR/dist/*.whl
+  )
 done
 
 # List all wheels.
