@@ -100,7 +100,6 @@ for whl in $WHEELHOUSE/pymoose*.whl; do
     auditwheel show "$whl"
 done
 
-PYMOOSE_PYPI_PASSWORD="$1"
 # upload to PYPI.
 for whl in `find $WHEELHOUSE -name "pymoose*.whl"`; do
     # If successful, upload using twine.

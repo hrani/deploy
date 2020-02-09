@@ -3,8 +3,8 @@
 FROM bhallalab/manylinux2010:latest
 MAINTAINER Dilawar Singh <dilawar.s.rajput@gmail.com>
 ARG PYMOOSE_PYPI_PASSWORD
-ENV PYMOOSE_PYPI_PASSWORD=${PYMOOSE_PYPI_PASSWORD}
+ENV PYMOOSE_PYPI_PASSWORD=$PYMOOSE_PYPI_PASSWORD
 WORKDIR /root
 COPY ./BRANCH .
 COPY ./build_wheels_linux.sh .
-RUN ./build_wheels_linux.sh
+RUN PYMOOSE_PYPI_PASSWORD=$PYMOOSE_PYPI_PASSWORD ./build_wheels_linux.sh
