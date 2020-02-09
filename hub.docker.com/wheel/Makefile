@@ -1,10 +1,10 @@
 VERSION := 3.2.dev$(shell date +"%Y%m%d")
 
-all : wheels
+all : image
 
 DOCKERFILE:=bhallalab/manylinux2010
 
-wheels : ./Dockerfile 
+image : ./Dockerfile 
 	docker build  -t $(DOCKERFILE):$(VERSION) .
 	docker build  -t $(DOCKERFILE):latest .
 
