@@ -8,7 +8,7 @@ wheels : ./Dockerfile ./build_wheels_linux.sh
 	mkdir -p $(HOME)/wheelhouse
 	docker build \
 	    -t $(DOCKERFILE) \
-	    --build-arg PYPI_PASSWORD=$(PYPI_PASSWORD) . 
+	    --build-arg PYMOOSE_PYPI_PASSWORD=$(PYMOOSE_PYPI_PASSWORD) . 
 
 run:
 	docker run -it $(DOCKERFILE) /bin/bash

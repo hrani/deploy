@@ -1,7 +1,6 @@
 #!/bin/sh
 
-set -e 
-set -x
+set -e -x
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 NPROC=$(cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l)
@@ -47,7 +46,8 @@ if [ -d $MOOSE_SOURCE_DIR ]; then
   cd $MOOSE_SOURCE_DIR && git checkout $BRANCH && git pull origin $BRANCH
   rm -rf dist
 else
-  git clone https://github.com/dilawar/moose-core $MOOSE_SOURCE_DIR --depth 10 --branch $BRANCH
+  git clone https://github.com/dilawar/moose-core $MOOSE_SOURCE_DIR \
+    --depth 10 --branch $BRANCH
 fi
 
 # Try to link statically.
@@ -101,15 +101,22 @@ for whl in $WHEELHOUSE/pymoose*.whl; do
     auditwheel show "$whl"
 done
 
-PYPI_PASSWORD="$1"
+PYMOOSE_PYPI_PASSWORD="$1"
 # upload to PYPI.
 for whl in `find $WHEELHOUSE -name "pymoose*.whl"`; do
     # If successful, upload using twine.
-    if [ -n "$PYPI_PASSWORD" ]; then
-        $TWINE upload $whl --user bhallalab --password $PYPI_PASSWORD --skip-existing
+    if [ -n "$PYMOOSE_PYPI_PASSWORD" ]; then
+        $TWINE upload $whl \
+          --user bhallalab \
+          --password $PYMOOSE_PYPI_PASSWORD --skip-existing
     else
         echo "PYPI password is not set"
     fi
 done
 
 # Now upload the source distribution.
+cd $MOOSE_SOURCE_DIR 
+$PY38 setup.py sdist 
+$PY38 twine upload dist/pymoose*.tar.gz \
+  --user bhallalab --password $PYMOOSE_PYPI_PASSWORD \
+  --skip-existing
