@@ -60,7 +60,7 @@ PY36=$(ls /opt/python/cp36-cp36m/bin/python?.?)
 PY37=$(ls /opt/python/cp37-cp37m/bin/python?.?)
 PY38=$(ls /opt/python/cp38-cp38/bin/python?.?)
 
-for PYTHON in $PY38 $PY27; do
+for PYTHON in $PY38 $PY37 $PY36 $PY35 $PY27; do
   echo "========= Building using $PYTHON ..."
   $PYTHON -m pip install pip setuptools --upgrade
   if [[ "$PYV" -eq "27" ]]; then
@@ -99,7 +99,7 @@ ls -lh $WHEELHOUSE/*.whl
 for whl in $WHEELHOUSE/pymoose*.whl; do
     auditwheel show "$whl"
     # Fix the tag and remove the old wheel.
-    auditwheel addtag "$whl" -w . && rm -f "$whl"
+    auditwheel repair "$whl" -w $WHEELHOUSE && rm -f "$whl"
 done
 
 # upload to PYPI.
@@ -116,12 +116,12 @@ for whl in `find $WHEELHOUSE -name "pymoose*.whl"`; do
     fi
 done
 
-# Now upload the source distribution.
-cd $MOOSE_SOURCE_DIR 
-if [ -d dist ]; then
-  rm -rf dist
-fi
-$PY38 setup.py sdist 
-$TWINE upload dist/pymoose*.tar.gz \
-  --user bhallalab --password $PYMOOSE_PYPI_PASSWORD \
-  --skip-existing
+## # Now upload the source distribution.
+## cd $MOOSE_SOURCE_DIR 
+## if [ -d dist ]; then
+##   rm -rf dist
+## fi
+## $PY38 setup.py sdist 
+## $TWINE upload dist/pymoose*.tar.gz \
+##   --user bhallalab --password $PYMOOSE_PYPI_PASSWORD \
+##   --skip-existing
