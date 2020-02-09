@@ -17,7 +17,6 @@ mkdir -p $WHEELHOUSE
 BRANCH=$(cat ./BRANCH)
 VERSION="3.2dev$(date +%Y%m%d)"
 
-
 # Create a test script and upload.
 TESTFILE=/tmp/test.py
 cat <<EOF >$TESTFILE
@@ -116,7 +115,8 @@ done
 
 # Now upload the source distribution.
 cd $MOOSE_SOURCE_DIR 
+$PY38 -m pip install twine
 $PY38 setup.py sdist 
-$PY38 twine upload dist/pymoose*.tar.gz \
+$PY38 -m twine upload dist/pymoose*.tar.gz \
   --user bhallalab --password $PYMOOSE_PYPI_PASSWORD \
   --skip-existing
