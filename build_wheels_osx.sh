@@ -9,13 +9,12 @@ export PATH=/usr/local/bin:$PATH
 
 brew update || echo "Failed to update brew"
 brew install gsl  || brew upgrade gsl 
-brew upgrade python@3 || echo "Failed to upgrade python3"
-brew upgrade python@2 || echo "Failed to upgrade python2"
-brew upgrade python || echo "Failed to upgrade python"
+brew install python@3 || echo "Failed to install python3"
+brew install python@2 || echo "Failed to install python2"
 
 # Following are to remove numpy; It is breaking the build on Xcode9.4.
-brew uninstall gdal postgis || echo "Failed to uninstall gdal/postgis"
-brew uninstall numpy || echo "Failed to uninstall numpy"
+# brew uninstall gdal postgis || echo "Failed to uninstall gdal/postgis"
+# brew uninstall numpy || echo "Failed to uninstall numpy"
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
