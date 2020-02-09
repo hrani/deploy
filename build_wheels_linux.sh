@@ -46,7 +46,7 @@ if [ -d $MOOSE_SOURCE_DIR ]; then
   rm -rf dist
 else
   git clone https://github.com/dilawar/moose-core $MOOSE_SOURCE_DIR \
-    --depth 10 --branch $BRANCH
+    --depth 1 --branch $BRANCH
 fi
 
 # Try to link statically.
