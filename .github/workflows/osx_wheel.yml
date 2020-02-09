@@ -1,0 +1,21 @@
+name: Build Wheels ON OSX
+
+on: [push]
+
+jobs:
+  build:
+
+    runs-on: macOS-latest
+
+    steps:
+    - uses: actions/checkout@v2
+    - name: Configure
+      env:
+        PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
+      run: |
+        brew install python@3
+        brew install python@2
+        brew install git cmake 
+    - name: Build wheels
+      run: |
+        ./build_wheels_osx.sh

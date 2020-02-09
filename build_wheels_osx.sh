@@ -3,20 +3,18 @@ set -e
 set -x
 
 BRANCH=$(cat ./BRANCH)
-VERSION=3.2.dev$(date +%Y%m%d)
 
 # Just to be sure on homebrew.
 export PATH=/usr/local/bin:$PATH
 
 brew update || echo "Failed to update brew"
 brew install gsl  || brew upgrade gsl 
-brew upgrade python@3 || echo "Failed to upgrade python3"
-brew upgrade python@2 || echo "Failed to upgrade python2"
-brew upgrade python || echo "Failed to upgrade python"
+brew install python@3 || echo "Failed to install python3"
+brew install python@2 || echo "Failed to install python2"
 
 # Following are to remove numpy; It is breaking the build on Xcode9.4.
-brew uninstall gdal postgis || echo "Failed to uninstall gdal/postgis"
-brew uninstall numpy || echo "Failed to uninstall numpy"
+# brew uninstall gdal postgis || echo "Failed to uninstall gdal/postgis"
+# brew uninstall numpy || echo "Failed to uninstall numpy"
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 
@@ -26,12 +24,13 @@ if [ ! -d $MOOSE_SOURCE_DIR ]; then
     git clone https://github.com/dilawar/moose-core -b $BRANCH --depth 10
 fi
 cd moose-core && git pull
+
 WHEELHOUSE=$HOME/wheelhouse
-mkdir -p $WHEELHOUSE
+rm -rf $WHEELHOUSE && mkdir -p $WHEELHOUSE
 
 # Current version 0.7.4 seems to be broken with python3.7 .
 # See https://travis-ci.org/BhallaLab/deploy/jobs/435219820
-python3 -m pip install delocate --user
+/usr/local/bin/python3 -m pip install delocate 
 DELOCATE_WHEEL=/usr/local/bin/delocate-wheel
 
 # Always prefer brew version.
@@ -53,13 +52,15 @@ for _py in 3 2; do
     ( 
         cd $MOOSE_SOURCE_DIR
         $PYTHON setup.py build_ext 
+        export GSL_USE_STATIC_LIBRARIES=1
         $PYTHON setup.py bdist_wheel --skip-build 
-        cp dist/*.whl $WHEELHOUSE
+        $DELOCATE_WHEEL -v dist/*.whl -w $WHEELHOUSE
+        rm -rf dist/*.whl
     )
 
-    if [ ! -z "$PYPI_PASSWORD" ]; then
+    if [ ! -z "$PYMOOSE_PYPI_PASSWORD" ]; then
         echo "Did you test the wheels? I am uploading anyway ..."
-        $PYTHON -m twine upload -u bhallalab -p $PYPI_PASSWORD \
-            $HOME/wheelhouse/pymoose*.whl || echo "Failed to upload to PyPi"
+        $PYTHON -m twine upload -u bhallalab -p $PYMOOSE_PYPI_PASSWORD \
+            $WHEELHOUSE/pymoose*.whl || echo "Failed to upload to PyPi"
     fi
 done

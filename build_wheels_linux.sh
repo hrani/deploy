@@ -17,7 +17,6 @@ mkdir -p $WHEELHOUSE
 BRANCH=$(cat ./BRANCH)
 VERSION="3.2dev$(date +%Y%m%d)"
 
-
 # Create a test script and upload.
 TESTFILE=/tmp/test.py
 cat <<EOF >$TESTFILE
@@ -47,7 +46,7 @@ if [ -d $MOOSE_SOURCE_DIR ]; then
   rm -rf dist
 else
   git clone https://github.com/dilawar/moose-core $MOOSE_SOURCE_DIR \
-    --depth 10 --branch $BRANCH
+    --depth 1 --branch $BRANCH
 fi
 
 # Try to link statically.
@@ -99,10 +98,13 @@ ls -lh $WHEELHOUSE/*.whl
 # now check the wheels.
 for whl in $WHEELHOUSE/pymoose*.whl; do
     auditwheel show "$whl"
+    # Fix the tag and remove the old wheel.
+    auditwheel repair "$whl" -w $WHEELHOUSE && rm -f "$whl"
 done
 
-PYMOOSE_PYPI_PASSWORD="$1"
 # upload to PYPI.
+$PY38 -m pip install twine
+TWINE="$PY38 -m twine"
 for whl in `find $WHEELHOUSE -name "pymoose*.whl"`; do
     # If successful, upload using twine.
     if [ -n "$PYMOOSE_PYPI_PASSWORD" ]; then
@@ -116,7 +118,10 @@ done
 
 # Now upload the source distribution.
 cd $MOOSE_SOURCE_DIR 
+if [ -d dist ]; then
+  rm -rf dist
+fi
 $PY38 setup.py sdist 
-$PY38 twine upload dist/pymoose*.tar.gz \
+$TWINE upload dist/pymoose*.tar.gz \
   --user bhallalab --password $PYMOOSE_PYPI_PASSWORD \
   --skip-existing
