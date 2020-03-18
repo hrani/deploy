@@ -1,27 +1,25 @@
 sudo : required
 
 matrix:
-    include:
-        - os : osx
-          osx_image: xcode10
-        - os: osx
-          osx_image: xcode9.4
-        - os: linux
-          sudo: required
+  include:
+    - os : osx
+      osx_image: xcode11
+    - os: osx
+      osx_image: xcode10
+    - os: linux
+      sudo: required
 
 services:
-    - docker
+  - docker
 
 
 notifications:
   email:
     recipients:
-    - bhalla@ncbs.res.in
-    - dilawar.s.rajput@gmail.com
-    - hrani@ncbs.res.in
+      - dilawar.s.rajput@gmail.com
     on_success: change
     on_failure: always
 
 script:
-    - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./build_wheels_osx.sh      ; fi
-    - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then make   ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "osx" ]]; then ./build_wheels_osx.sh      ; fi
+  - if [[ "$TRAVIS_OS_NAME" == "linux" ]]; then make   ; fi
