@@ -115,11 +115,3 @@ for whl in `find $WHEELHOUSE -name "pymoose*.whl"`; do
         echo "PYPI password is not set"
     fi
 done
-
-# Now upload the source distribution.
-cd $MOOSE_SOURCE_DIR 
-rm -rf dist
-$PY38 setup.py sdist 
-$TWINE upload dist/pymoose*.tar.gz \
-  --user bhallalab --password $PYMOOSE_PYPI_PASSWORD \
-  --skip-existing || echo "Failed to upload source distribution."
