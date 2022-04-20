@@ -1,18 +1,20 @@
-name: Docker Image CI
+name: Build Wheels ON linux
 
-on:
-  push:
-    branches: [ master ]
-  pull_request:
-    branches: [ master ]
+on: [push]
 
 jobs:
-
   build:
 
-    runs-on: ubuntu-latest
+    runs-on: linux-latest
 
     steps:
-    - uses: actions/checkout@v3
-    - name: Build the Docker image
-      run: docker build . --file Dockerfile --tag my-image-name:$(date +%s)
+    - uses: actions/checkout@v2
+    - name: Configure
+      env:
+        PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
+      run: |
+        apt-get install python@2
+        apt-get install git cmake 
+    - name: Build wheels
+      run: |
+        ./build_wheels_linux.sh
