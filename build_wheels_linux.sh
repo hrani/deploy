@@ -68,9 +68,10 @@ for PYTHON in $PY38 $PY37 $PY36 $PY35 $PY27; do
     sudo apt install python2
     curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
     sudo python2 get-pip.py
+  else
+    $PYTHON -m pip install pip setuptools --upgrade
   fi
 
-  $PYTHON -m pip install pip setuptools --upgrade
   if [[ "$PYV" -eq "27" ]]; then
     $PYTHON -m pip install numpy==1.15
     $PYTHON -m pip install matplotlib==2.2.3
