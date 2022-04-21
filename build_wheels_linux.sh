@@ -15,7 +15,7 @@ mkdir -p $WHEELHOUSE
 
 # tag on github and revision number. Make sure that they are there.
 BRANCH=$(cat ./BRANCH)
-VERSION="3.2dev$(date +%Y%m%d)"
+VERSION="4.0.0dev$(date +%Y%m%d)"
 
 # Create a test script and upload.
 TESTFILE=/tmp/test.py
@@ -45,7 +45,7 @@ if [ -d $MOOSE_SOURCE_DIR ]; then
   cd $MOOSE_SOURCE_DIR && git checkout $BRANCH && git pull origin $BRANCH
   rm -rf dist
 else
-  git clone https://github.com/dilawar/moose-core $MOOSE_SOURCE_DIR \
+  git clone https://github.com/bhallalab/moose-core $MOOSE_SOURCE_DIR \
     --depth 1 --branch $BRANCH
 fi
 
