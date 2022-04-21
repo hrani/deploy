@@ -8,13 +8,15 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - uses: actions/checkout@v3
+    - uses: actions/checkout@v2
     - name: Configure
       env:
         PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
       run: |
-       sudo apt-get update && sudo apt upgrade
+         sudo apt-get update && sudo apt upgrade
          sudo apt-get install python2-pip
          sudo apt-get install python3-pip
+          
     - name: Build wheels
+      run: |
         ./build_wheels_linux.sh
