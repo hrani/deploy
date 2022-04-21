@@ -1,4 +1,4 @@
-name: Build Wheels ON linux
+name: Build Wheels ON ubuntu
 
 on: [push]
 
