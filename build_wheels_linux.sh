@@ -54,8 +54,8 @@ GSL_STATIC_LIBS="/usr/local/lib/libgsl.a;/usr/local/lib/libgslcblas.a"
 CMAKE=/usr/bin/cmake3
 
 # Build wheels here.
-PY27=$(ls /usr/local/bin/python?.?)
-PY35=$(ls /usr/local/bin/python?.?)
+PY27=$(ls /usr/local/bin/python$_py)
+PY35=$(ls /usr/local/bin/python$_py)
 PY36=$(ls /usr/local/bin/python?.?)
 PY37=$(ls /usr/local/bin/python?.?)
 PY38=$(ls /usr/local/bin/python?.?)
