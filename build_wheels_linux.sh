@@ -54,11 +54,11 @@ GSL_STATIC_LIBS="/usr/local/lib/libgsl.a;/usr/local/lib/libgslcblas.a"
 CMAKE=/usr/bin/cmake3
 
 # Build wheels here.
-PY27=$(ls /usr/bin/python?.?)
+#PY27=$(ls /usr/bin/python?.?)
 #PY35=$(ls /usr/bin/python?.?)
 #PY36=$(ls /usr/local/bin/python?.?)
 #PY37=$(ls /usr/local/bin/python?.?)
-PY38=$(ls /usr/bin/python?.?)
+PY38=$(ls /usr/bin/python3.?)
 
 for PYTHON in $PY38 $PY37 $PY36 $PY35 $PY27; do
   echo "========= Building using $PYTHON ..."
