@@ -10,7 +10,7 @@ export PATH=/usr/local/bin:$PATH
 brew update || echo "Failed to update brew"
 brew install gsl  || brew upgrade gsl 
 brew install python@3 || echo "Failed to install python3"
-brew install python@2 || echo "Failed to install python2"
+#brew install python@2 || echo "Failed to install python2"
 
 # Following are to remove numpy; It is breaking the build on Xcode9.4.
 # brew uninstall gdal postgis || echo "Failed to uninstall gdal/postgis"
@@ -21,7 +21,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 MOOSE_SOURCE_DIR=`pwd`/moose-core
 
 if [ ! -d $MOOSE_SOURCE_DIR ]; then
-    git clone https://github.com/dilawar/moose-core -b $BRANCH --depth 10
+    git clone https://github.com/bhallalab/moose-core -b $BRANCH --depth 10
 fi
 cd moose-core && git pull
 
