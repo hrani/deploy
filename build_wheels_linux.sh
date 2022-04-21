@@ -54,24 +54,17 @@ GSL_STATIC_LIBS="/usr/local/lib/libgsl.a;/usr/local/lib/libgslcblas.a"
 CMAKE=/usr/bin/cmake3
 
 # Build wheels here.
-PY27=$(ls /usr/bin/python?.?)
+#PY27=$(ls /usr/bin/python?.?)
 #PY35=$(ls /usr/bin/python?.?)
 #PY36=$(ls /usr/local/bin/python?.?)
 #PY37=$(ls /usr/local/bin/python?.?)
-PY38=$(ls /usr/bin/python?.?)
+PY38=$(ls /usr/bin/python3.?)
 
 for PYTHON in $PY38 $PY37 $PY36 $PY35 $PY27; do
   echo "========= Building using $PYTHON ..."
-  if [[ "$PYV" -eq "27" ]]; then
-    sudo add-apt-repository universe
-    sudo apt update
-    sudo apt install python2
-    curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
-    sudo python2 get-pip.py
-  else
-    $PYTHON -m pip install pip setuptools --upgrade
-  fi
-
+  
+  $PYTHON -m pip install pip setuptools --upgrade
+  
   if [[ "$PYV" -eq "27" ]]; then
     $PYTHON -m pip install numpy==1.15
     $PYTHON -m pip install matplotlib==2.2.3
@@ -84,7 +77,7 @@ for PYTHON in $PY38 $PY37 $PY36 $PY35 $PY27; do
 
   # Removing existing pymoose if any.
   $PYTHON -m pip uninstall pymoose -y || echo "No pymoose"
-
+  sudo apt-get install libhdf5-dev
   cd $MOOSE_SOURCE_DIR
   export GSL_USE_STATIC_LIBRARIES=1
   $PYTHON setup.py build_ext 
