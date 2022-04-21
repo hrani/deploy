@@ -54,14 +54,22 @@ GSL_STATIC_LIBS="/usr/local/lib/libgsl.a;/usr/local/lib/libgslcblas.a"
 CMAKE=/usr/bin/cmake3
 
 # Build wheels here.
-#PY27=$(ls /usr/bin/python?.?)
+PY27=$(ls /usr/bin/python?.?)
 #PY35=$(ls /usr/bin/python?.?)
 #PY36=$(ls /usr/local/bin/python?.?)
 #PY37=$(ls /usr/local/bin/python?.?)
-PY38=$(ls /usr/bin/python3.?)
+PY38=$(ls /usr/bin/python?.?)
 
 for PYTHON in $PY38 $PY37 $PY36 $PY35 $PY27; do
   echo "========= Building using $PYTHON ..."
+  if [[ "$PYV" -eq "27" ]]; then
+    sudo add-apt-repository universe
+    sudo apt update
+    sudo apt install python2
+    curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py
+    sudo python2 get-pip.py
+  fi
+
   $PYTHON -m pip install pip setuptools --upgrade
   if [[ "$PYV" -eq "27" ]]; then
     $PYTHON -m pip install numpy==1.15
@@ -94,6 +102,8 @@ done
 
 # List all wheels.
 ls -lh $WHEELHOUSE/*.whl
+$PYTHON -m pip install auditwheel
+
 
 # now check the wheels.
 for whl in $WHEELHOUSE/pymoose*.whl; do
