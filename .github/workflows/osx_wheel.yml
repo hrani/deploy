@@ -5,7 +5,7 @@ on: [push]
 jobs:
   build:
 
-    runs-on: macOS-latest
+    runs-on: ubuntu-latest
 
     steps:
     - uses: actions/checkout@v2
@@ -13,10 +13,8 @@ jobs:
       env:
         PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
       run: |
-        brew uninstall git
-        brew install python@3
-        brew uninstall git
-        brew install git cmake 
+       sudo apt-get install python@3
+        sudo apt-get install git cmake  
     - name: Build wheels
       run: |
-        ./build_wheels_osx.sh
+        ./build_wheels_linux.sh
