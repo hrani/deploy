@@ -13,7 +13,7 @@ jobs:
       env:
         PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
       run: |
-        sudo apt-get install python@3
+         sudo apt-get install python@3
           
     - name: Build wheels
       run: |
