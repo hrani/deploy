@@ -13,7 +13,7 @@ jobs:
       env:
         PYMOOSE_DOCKER_USER: ${{ secrets.DOCKER_HUB_USERNAME }}
       run: |
-        sudo apt-get install python@2
+        sudo apt-get install python@3
         sudo apt-get install git cmake 
     - name: Build wheels
       run: |
