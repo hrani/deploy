@@ -36,7 +36,7 @@ if [ ! -f /usr/local/lib/libgsl.a ]; then
     tar xvf gsl-2.4.tar.gz 
     cd gsl-2.4 
     CFLAGS=-fPIC ./configure --enable-static && make $MAKEOPTS
-    make install 
+    sudo make install 
     cd ..
 fi 
 
