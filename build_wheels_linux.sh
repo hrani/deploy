@@ -6,7 +6,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 NPROC=$(cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l)
 NUM_WORKERS=$((NPROC))
 MAKEOPTS="-j$NUM_WORKERS"
-
+MAKEOPTS='-J16'
 # Place to store wheels.
 
 WHEELHOUSE=${1-$HOME/wheelhouse}
@@ -75,8 +75,8 @@ for PYTHON in $PY38 $PY37 $PY36 $PY35 $PY27; do
 
   $PYTHON -m pip install twine
 
-  # Removing existing pymoose if any.
-  $PYTHON -m pip uninstall pymoose -y || echo "No pymoose"
+  # Removing existing testpymoose if any.
+  $PYTHON -m pip uninstall testpymoose -y || echo "No testpymoose"
   sudo apt-get install libhdf5-dev
   cd $MOOSE_SOURCE_DIR
   export GSL_USE_STATIC_LIBRARIES=1
@@ -100,7 +100,7 @@ $PYTHON -m pip install auditwheel
 
 
 # now check the wheels.
-for whl in $WHEELHOUSE/pymoose*.whl; do
+for whl in $WHEELHOUSE/testpymoose*.whl; do
     auditwheel show "$whl"
     # Fix the tag and remove the old wheel.
     auditwheel repair "$whl" -w $WHEELHOUSE && rm -f "$whl"
@@ -109,12 +109,12 @@ done
 # upload to PYPI.
 $PY38 -m pip install twine
 TWINE="$PY38 -m twine"
-for whl in `find $WHEELHOUSE -name "pymoose*.whl"`; do
+for whl in `find $WHEELHOUSE -name "testpymoose*.whl"`; do
     # If successful, upload using twine.
-    if [ -n "$PYMOOSE_PYPI_PASSWORD" ]; then
+    if [ -n "$testpymoose_PYPI_PASSWORD" ]; then
         $TWINE upload $whl \
           --user bhallalab \
-          --password $PYMOOSE_PYPI_PASSWORD --skip-existing
+          --password $testpymoose_PYPI_PASSWORD --skip-existing
     else
         echo "PYPI password is not set"
     fi
