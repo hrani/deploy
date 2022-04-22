@@ -6,7 +6,7 @@ SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 NPROC=$(cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l)
 NUM_WORKERS=$((NPROC))
 MAKEOPTS="-j$NUM_WORKERS"
-MAKEOPTS='-J16'
+#MAKEOPTS='-J16'
 # Place to store wheels.
 
 WHEELHOUSE=${1-$HOME/wheelhouse}
