@@ -12,16 +12,4 @@ jobs:
     - name: Configure
       env:
         PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-      run: |
-         sudo apt-get update && sudo apt upgrade
-         #sudo apt install curl
-         #sudo add-apt-repository universe
-         #curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7 
-         #python2 get-pip.py
-         #pip --version
-         #sudo apt-get install python2-pip
-         sudo apt-get install python3-pip
-          
-    - name: Build wheels
-      run: |
-        ./build_wheels_linux.sh
+        echo "at line unmber 15",$PYPI_API_TOKEN

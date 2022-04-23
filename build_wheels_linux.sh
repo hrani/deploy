@@ -6,6 +6,6 @@
     if [ -n "$PYPI_API_TOKEN" ]; then
 	echo "pypi token is set"
     else
-        echo "PYPI password is not set"
+        echo "PYPI_API_Token is not taken"
     fi
 
