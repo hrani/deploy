@@ -111,11 +111,11 @@ $PY38 -m pip install twine
 TWINE="$PY38 -m twine"
 for whl in `find $WHEELHOUSE -name "pymoose*.whl"`; do
     # If successful, upload using twine.
-    
-    if [ -n "$PYMOOSE_PYPI_PASSWORD" ]; then
+    echo $PYPI_API_TOKEN
+    if [ -n "$PYPI_API_TOKEN" ]; then
         $TWINE upload $whl \
           --user __token__ \
-          --password $PYMOOSE_PYPI_PASSWORD --skip-existing
+          --password $PYPI_API_TOKEN --skip-existing
     else
         echo "PYPI password is not set"
     fi
