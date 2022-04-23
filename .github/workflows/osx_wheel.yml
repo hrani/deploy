@@ -11,5 +11,7 @@ jobs:
     - uses: actions/checkout@v2
     - name: Configure
       env:
-        PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-        echo "at line unmber 15",$PYPI_API_TOKEN
+        PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}    
+    - name: Build wheels
+      run: |
+        ./build_wheels_linux.sh
