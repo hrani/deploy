@@ -25,4 +25,4 @@ jobs:
         #echo ${{ secrets.PYPI_API_TOKEN }}
         
         #echo "PYPI_API_TOKENecho=secrets.PYPI_API_TOKEN" >> $GITHUB_ENV
-        ./build_wheels_linux.sh
+        ./build_wheels_linux.sh $FOO $PYPI_API_TOKEN
