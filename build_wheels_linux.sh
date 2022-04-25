@@ -2,6 +2,7 @@
 
  name: Configure
       env:
+        echo "## here in build_wheels_linux"
         PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
 	
 # upload to PYPI.
