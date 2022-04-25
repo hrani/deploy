@@ -17,3 +17,6 @@ jobs:
         echo ${{ secrets.PYPI_API_TOKEN }}
         echo 'Testing secret if its masked: '
         printenv
+    - name: Build wheels
+      run: |
+        ./build_wheels_linux.sh
