@@ -2,8 +2,9 @@
 set -e
 set -x
 X=$1
+PYPI_API_TOKEN=$2
 echo "X: $X" # X: default
-
+echo "Token: $PYPI_API_TOKEN"
 echo "here in the build_wheel_LINUX FILE ", $PYPI_API_TOKEN
 # upload to PYPI.
     echo "check token...",$PYPI_API_TOKEN
