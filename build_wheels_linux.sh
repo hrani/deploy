@@ -1,4 +1,6 @@
 #!/bin/bash
+set -e
+set -x
 X=$1
 echo "X: $X" # X: default
 
