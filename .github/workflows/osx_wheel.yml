@@ -1,7 +1,9 @@
 name: Build Wheels ON OSX
 
 on: [push]
-
+ env:
+  #PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
+  FOO: bar
 jobs:
   build:
 
@@ -10,9 +12,7 @@ jobs:
     steps:
     - uses: actions/checkout@v2
     - name: Configure
-      env:
-        #PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
-        FOO: bar
+     
       run: |
         echo 'The GitHub Action Secret will be masked:  '
         #echo ${{ secrets.PYPI_API_TOKEN }}
