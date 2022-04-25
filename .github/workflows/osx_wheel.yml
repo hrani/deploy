@@ -13,4 +13,7 @@ jobs:
       env:
         PYPI_API_TOKEN: ${{ secrets.PYPI_API_TOKEN }}
       run: |
-         echo ${{ secrets.PYPI_API_TOKEN }}
+        echo 'The GitHub Action Secret will be masked:  '
+        echo ${{ secrets.PYPI_API_TOKEN }}
+        echo 'Testing secret if its masked: '
+        printenv
