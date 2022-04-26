@@ -2,7 +2,7 @@
 
 set -e -x
 
-#PYPI_API_TOKEN=$1
+PYPI_API_TOKEN=$1
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 NPROC=$(cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l)
@@ -115,9 +115,10 @@ for whl in `find $WHEELHOUSE -name "pymoose*.whl"`; do
     # If successful, upload using twine.
     echo $PYPI_API_TOKEN
     if [ -n "$PYPI_API_TOKEN" ]; then
-        $TWINE upload $whl \
-          --user __token__ \
-          --password $PYPI_API_TOKEN --skip-existing
+        echo "pypi api token is set"
+        #$TWINE upload $whl \
+        #  --user __token__ \
+        #  --password $PYPI_API_TOKEN --skip-existing
     else
         echo "PYPI password is not set"
     fi
