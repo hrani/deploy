@@ -14,13 +14,9 @@ jobs:
         PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
       run: |
          sudo apt-get update && sudo apt upgrade
-         #sudo apt install curl
-         #sudo add-apt-repository universe
-         #curl https://bootstrap.pypa.io/pip/2.7/get-pip.py --output get-pip.py # Fetch get-pip.py for python 2.7 
-         #python2 get-pip.py
-         #pip --version
-         #sudo apt-get install python2-pip
          sudo apt-get install python3-pip
+         sudo apt-get install python3-dev python3-pip python3-venv python3-wheel -y
+         pip3 install wheel
           
     - name: Build wheels
       run: |
