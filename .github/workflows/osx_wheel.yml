@@ -12,7 +12,7 @@ jobs:
     - name: Configure
       env:
         #PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
-        PYPI_API_TOKEN:${{secrets.PYPI_API_TOKEN}}
+        PYPI_API_TOKEN: ${{secrets.PYPI_API_TOKEN}}
       run: |
          sudo apt-get update && sudo apt upgrade
          sudo apt-get install python3-pip
