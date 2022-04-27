@@ -2,7 +2,6 @@
 
 set -e -x
 
-PYPI_API_TOKEN=$1
 
 SCRIPT_DIR="$( cd "$( dirname "${BASH_SOURCE[0]}" )" && pwd )"
 NPROC=$(cat /proc/cpuinfo | awk '/^processor/{print $3}' | wc -l)
@@ -107,7 +106,9 @@ for whl in $WHEELHOUSE/pymoose*.whl; do
     # Fix the tag and remove the old wheel.
     auditwheel repair "$whl" -w $WHEELHOUSE && rm -f "$whl"
 done
-
+echo "Wheelhouse value",$WHEELHOUSE
+PYPI_API_TOKEN=$1
+echo "pypiapitoekn value",$PYPI_API_TOKEN
 # upload to PYPI.
 $PY38 -m pip install twine
 TWINE="$PY38 -m twine"
