@@ -111,8 +111,8 @@ echo "Wheelhouse value",$WHEELHOUSE
 echo "pypiapitoekn value",$PYPI_API_TOKEN
 # upload to PYPI.
 $PY38 -m pip install twine
-$PY38 -m pip uninstall urllib3    
-$PY38 -m pip uninstall chardet
+#$PY38 -m pip uninstall urllib3    
+#$PY38 -m pip uninstall chardet
 $PY38 -m pip install requests
 pip install --upgrade --user urllib3==1.26.9
 #$PY38 -m pip install --upgrade requests==2.20.1
