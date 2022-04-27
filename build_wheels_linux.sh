@@ -117,9 +117,9 @@ for whl in `find $WHEELHOUSE -name "pymoose*.whl"`; do
     echo $PYPI_API_TOKEN
     if [ -n "$PYPI_API_TOKEN" ]; then
         echo "pypi api token is set"
-        #$TWINE upload $whl \
-        #  --user __token__ \
-        #  --password $PYPI_API_TOKEN --skip-existing
+        $TWINE upload $whl \
+          --user __token__ \
+          --password $PYPI_API_TOKEN --skip-existing
     else
         echo "PYPI password is not set"
     fi
