@@ -107,7 +107,7 @@ for whl in $WHEELHOUSE/pymoose*.whl; do
     auditwheel repair "$whl" -w $WHEELHOUSE && rm -f "$whl"
 done
 echo "Wheelhouse value",$WHEELHOUSE
-PYPI_API_TOKEN=$1
+#PYPI_API_TOKEN=$1
 echo "pypiapitoekn value",$PYPI_API_TOKEN
 # upload to PYPI.
 $PY38 -m pip install twine
