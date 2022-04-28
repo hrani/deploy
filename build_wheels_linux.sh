@@ -118,7 +118,7 @@ pip install --upgrade --user urllib3==1.26.9
 pip install --upgrade --user chardet==3.0.4
 #pip install --upgrade --user cryptography
 pip install pyOpenSSL --upgrade --user
-pip install --upgrade twine
+pip install --upgrade --user twine
 #$PY38 -m pip install --upgrade requests==2.20.1
 TWINE="$PY38 -m twine"
 for whl in `find $WHEELHOUSE -name "pymoose*.whl"`; do
