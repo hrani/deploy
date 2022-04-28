@@ -115,6 +115,7 @@ $PY38 -m pip install twine
 #$PY38 -m pip uninstall chardet
 $PY38 -m pip install requests
 pip install --upgrade --user urllib3==1.26.9
+pip install --upgrade --user chardet==3.0.4
 #$PY38 -m pip install --upgrade requests==2.20.1
 TWINE="$PY38 -m twine"
 for whl in `find $WHEELHOUSE -name "pymoose*.whl"`; do
