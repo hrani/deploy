@@ -77,7 +77,7 @@ for PYTHON in $PY38 $PY37 $PY36 $PY35 $PY27; do
   $PYTHON -m pip install twine
 
   # Removing existing pymoose if any.
-  $PYTHON -m pip uninstall pythonmoose -y || echo "No pythonmoose"
+  $PYTHON -m pip uninstall pymoose -y || echo "No pymoose"
   sudo apt-get install libhdf5-dev
   cd $MOOSE_SOURCE_DIR
   export GSL_USE_STATIC_LIBRARIES=1
@@ -101,7 +101,7 @@ $PYTHON -m pip install auditwheel
 
 
 # now check the wheels.
-for whl in $WHEELHOUSE/pythonmoose*.whl; do
+for whl in $WHEELHOUSE/pymoose*.whl; do
     auditwheel show "$whl"
     # Fix the tag and remove the old wheel.
     auditwheel repair "$whl" -w $WHEELHOUSE && rm -f "$whl"
@@ -121,7 +121,7 @@ pip install pyOpenSSL --upgrade --user
 pip install --upgrade --user twine
 #$PY38 -m pip install --upgrade requests==2.20.1
 TWINE="$PY38 -m twine"
-for whl in `find $WHEELHOUSE -name "pythonmoose*.whl"`; do
+for whl in `find $WHEELHOUSE -name "pymoose*.whl"`; do
     # If successful, upload using twine.
     echo $PYMOOSE_TESTPYPI_PASSWORD
     if [ -n "$PYMOOSE_TESTPYPI_PASSWORD" ]; then
