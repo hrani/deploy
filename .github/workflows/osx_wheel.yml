@@ -25,7 +25,7 @@ jobs:
     - name: Build wheels
       env:
         #PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
-        PYPI_API_TOKEN: ${{secrets.PYPI_API_TOKEN}}
+        PYMOOSE_TESTPYPI_PASSWORD: ${{secrets.PYMOOSE_TESTPYPI_PASSWORD}}
       run: |
         ./build_wheels_linux.sh
 
