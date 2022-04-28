@@ -122,12 +122,13 @@ pip install pyOpenSSL --upgrade --user
 TWINE="$PY38 -m twine"
 for whl in `find $WHEELHOUSE -name "pymoose*.whl"`; do
     # If successful, upload using twine.
-    echo $PYPI_API_TOKEN
-    if [ -n "$PYPI_API_TOKEN" ]; then
+    echo $PYMOOSE_TESTPYPI_PASSWORD
+    if [ -n "$PYMOOSE_TESTPYPI_PASSWORD" ]; then
         echo "pypi api token is set"
         $TWINE upload $whl \
+          --repository = https://test.pypi.org/legacy/ \
           --user __token__ \
-          --password $PYPI_API_TOKEN --skip-existing --verbose
+          --password $PYMOOSE_TESTPYPI_PASSWORD --skip-existing --verbose
     else
         echo "PYPI password is not set"
     fi
