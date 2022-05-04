@@ -1,5 +1,6 @@
 name: Build Wheeks on OSX
-on:[push]
+
+on: [push]
 
 jobs:
   Linux-build:
