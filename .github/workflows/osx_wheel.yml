@@ -11,7 +11,7 @@ jobs:
     steps:
       - uses: actions/checkout@v2
       - name: build and upload manylinux wheels
-        uses: hrani/manylinux-wheel-builder@master
+        uses: pypa/manylinux-wheel-builder@master
       - name: Build wheels
         env:
           #PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
