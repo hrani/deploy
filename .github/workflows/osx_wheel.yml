@@ -11,7 +11,6 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    #- name: Configure
     - name: build and upload manylinux wheels
       uses: hrani/manylinux-wheel-builder@master
       #env:
