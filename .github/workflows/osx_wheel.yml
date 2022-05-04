@@ -9,7 +9,8 @@ jobs:
       PYMOOSE_TESTPYPI_PASSWORD: ${{secrets.PYMOOSE_TESTPYPI_PASSWORD}}
       
     steps:
-      - uses: actions/checkout@v2
+      - name: Checkout
+        uses: actions/checkout@v2
       - name: build and upload manylinux wheels
         uses: pypa/manylinux@main
       - name: Build wheels
