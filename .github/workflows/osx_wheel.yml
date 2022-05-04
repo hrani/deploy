@@ -11,7 +11,9 @@ jobs:
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
-    - name: Configure
+    #- name: Configure
+    - name: build and upload manylinux wheels
+      uses: hrani/manylinux-wheel-builder@master
       #env:
         #PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
         #PYPI_API_TOKEN: ${{secrets.PYPI_API_TOKEN}}
