@@ -1,8 +1,6 @@
 name: Build Wheeks on OSX
-on:
-  push:
-    tags:
-      - "v*" 
+on:[push]
+
 jobs:
   Linux-build:
     runs-on: ubuntu-latest
