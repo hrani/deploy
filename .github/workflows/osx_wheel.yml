@@ -1,3 +1,25 @@
+name: Build Wheeks on OSX
+on:
+  push:
+    tags:
+      - "v*" 
+jobs:
+  Linux-build:
+    runs-on: ubuntu-latest
+    env:
+      PYMOOSE_TESTPYPI_PASSWORD: ${{secrets.PYMOOSE_TESTPYPI_PASSWORD}}
+      
+    steps:
+      - uses: actions/checkout@v2
+      - name: build and upload manylinux wheels
+        uses: hrani/manylinux-wheel-builder@master
+    - name: Build wheels
+      env:
+        #PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
+        PYMOOSE_TESTPYPI_PASSWORD: ${{secrets.PYMOOSE_TESTPYPI_PASSWORD}}
+      run: |
+        ./build_wheels_linux.sh
+'''     
 name: Build Wheels ON OSX
 
 on: [push]
@@ -7,7 +29,11 @@ on: [push]
    
 jobs:
   build:
-
+    strategy:
+    matrix:
+      os: [macos-latest, windows-latest]
+      python-version: [3.6, 3.7, 3.8]
+      
     runs-on: ubuntu-latest
     steps:
     - uses: actions/checkout@v2
@@ -29,4 +55,4 @@ jobs:
         PYMOOSE_TESTPYPI_PASSWORD: ${{secrets.PYMOOSE_TESTPYPI_PASSWORD}}
       run: |
         ./build_wheels_linux.sh
-
+'''
