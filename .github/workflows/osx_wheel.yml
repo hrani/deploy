@@ -14,7 +14,7 @@ jobs:
       - name: build and upload manylinux wheels
         uses: RalfG/python-wheels-manylinux-build@v0.4.2
         with:
-          python-version:'cp36-cp36m'
+          python-versions:'cp36-cp36m'
         
       - name: Build wheels
         env:
