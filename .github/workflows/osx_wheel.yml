@@ -29,11 +29,3 @@ jobs:
         PYMOOSE_TESTPYPI_PASSWORD: ${{secrets.PYMOOSE_TESTPYPI_PASSWORD}}
       run: |
         ./build_wheels_linux.sh
-
-
-      env:
-        #PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
-        PYMOOSE_TESTPYPI_PASSWORD: ${{secrets.PYMOOSE_TESTPYPI_PASSWORD}}
-      run: |
-        ./build_wheels_linux.sh
-
