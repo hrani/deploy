@@ -1,25 +1,33 @@
-name: Build Wheeks on OSX
+name: Build Wheels ON OSX
 
 on: [push]
-
+#env:
+  #PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
+  #PYPI_API_TOKEN: ${{secrets.PYPI_API_TOKEN}}
+   
 jobs:
-  Linux-build:
-    runs-on: ubuntu-latest
-    env:
-      PYMOOSE_TESTPYPI_PASSWORD: ${{secrets.PYMOOSE_TESTPYPI_PASSWORD}}
+  build:
+    strategy:
+    matrix:
+      os: [macos-latest, windows-latest]
+      python-version: [3.6, 3.7, 3.8]
       
+    runs-on: ubuntu-latest
     steps:
-      - name: Checkout
-        uses: actions/checkout@v2
-      - name: build and upload manylinux wheels
-        uses: RalfG/python-wheels-manylinux-build@v0.4.2-manylinux2014_x86_64
-        with:
-          python-versions: 'cp36-cp36m cp37-cp37m'
-      - name: Build wheels
-        env:
-          #PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
-          PYMOOSE_TESTPYPI_PASSWORD: ${{secrets.PYMOOSE_TESTPYPI_PASSWORD}}
-        run: |
-          ./build_wheels_linux.sh
+    - uses: actions/checkout@v2
+    - name: build and upload manylinux wheels
+      uses: Ralf/python-wheels-manylinux-build@v0.4.2-manylinux2014_x86_64
+      run: |
+         sudo apt-get update && sudo apt upgrade
+         sudo apt-get install python3-pip
+         sudo apt-get install python3-dev python3-pip python3-venv python3-wheel -y
+         pip3 install wheel
+         pip3 install auditwheel-symbols
 
+    - name: Build wheels
+      env:
+        #PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
+        PYMOOSE_TESTPYPI_PASSWORD: ${{secrets.PYMOOSE_TESTPYPI_PASSWORD}}
+      run: |
+        ./build_wheels_linux.sh
 
