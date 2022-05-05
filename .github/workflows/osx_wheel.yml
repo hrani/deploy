@@ -19,7 +19,7 @@ jobs:
       uses: Ralf/python-wheels-manylinux-build@v0.4.2-manylinux2014_x86_64
       with:
         python-versions: 'cp36-cp36m cp37-cp37m'
-    -name : Install dependencies    
+    -name: Install dependencies    
       run: |
          sudo apt-get update && sudo apt upgrade
          sudo apt-get install python3-pip
@@ -28,6 +28,13 @@ jobs:
          pip3 install auditwheel-symbols
 
     - name: Build wheels
+      env:
+        #PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
+        PYMOOSE_TESTPYPI_PASSWORD: ${{secrets.PYMOOSE_TESTPYPI_PASSWORD}}
+      run: |
+        ./build_wheels_linux.sh
+
+
       env:
         #PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
         PYMOOSE_TESTPYPI_PASSWORD: ${{secrets.PYMOOSE_TESTPYPI_PASSWORD}}
