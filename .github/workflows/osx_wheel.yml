@@ -12,13 +12,14 @@ jobs:
       - name: Checkout
         uses: actions/checkout@v2
       - name: build and upload manylinux wheels
-        uses: RalfG/python-wheels-manylinux-build@v0.4.2
+        uses: RalfG/python-wheels-manylinux-build@v0.4.2-manylinux2014_x86_64
         with:
-          python-versions:'cp36-cp36m'
-        
+          python-versions: 'cp36-cp36m cp37-cp37m'
       - name: Build wheels
         env:
           #PYMOOSE_PYPI_PASSWORD: ${{ secrets.PYMOOSE_PYPI_PASSWORD }}
           PYMOOSE_TESTPYPI_PASSWORD: ${{secrets.PYMOOSE_TESTPYPI_PASSWORD}}
         run: |
           ./build_wheels_linux.sh
+
+
